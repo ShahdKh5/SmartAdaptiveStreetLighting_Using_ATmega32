@@ -1,17 +1,9 @@
-/***************************************************************************************/
-/****************************  IMT School Training Center ******************************/
-/***************************************************************************************/
 #ifndef BIT_MATH_H
 #define BIT_MATH_H
 
-#define SET_BIT(REG,BitNo)              REG |= (1<<BitNo)
-#define CLR_BIT(REG,BitNo)              REG &= ~(1<<BitNo)
-#define ASS_BIT(REG,BitNo,VAL)          (VAL==0)? CLR_BIT(REG,BitNo) : SET_BIT(REG,BitNo)
-#define TOG_BIT(REG,BitNo)              REG ^= (1<<BitNo)
-#define GET_BIT(REG,BitNo)              ((REG>>BitNo) & 0x01)
-
-#define SET_NIBBLE(REG,NibbleHalf)      (NibbleHalf == LOW)? (REG |= 00001111) : (REG |= 11110000)
-#define CLR_NIBBLE(REG,NibbleHalf)      (NibbleHalf == LOW)? (REG &= 11110000) : (REG &= 00001111)
-#define ASS_NIBBLE(REG,NibbleHalf,VAL)  (VAL == 0)? (CLR_NIBBLE(REG,NibbleHalf)) : (SET_NIBBLE(REG,NibbleHalf))
+#define SET_BIT(REG,BIT)   (REG |= (1<<(BIT)))
+#define CLR_BIT(REG,BIT)   (REG &= ~(1<<(BIT)))
+#define TOG_BIT(REG,BIT)   (REG ^= (1<<(BIT)))
+#define GET_BIT(REG,BIT)   ((REG>>(BIT)) & 1)
 
 #endif
