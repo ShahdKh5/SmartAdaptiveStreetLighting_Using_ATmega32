@@ -24,4 +24,6 @@ void BUTTON_voidInit(const BUTTON_Config_t *Copy_pstrButtonConfig);
 /* Read the state of the button with de-bouncing (Returns BUTTON_PRESSED or BUTTON_RELEASED) */
 u8 BUTTON_u8GetState(const BUTTON_Config_t *Copy_pstrButtonConfig);
 
+u8 BUTTON_u8GetPressEvent(const BUTTON_Config_t *Copy_pstrConfig, u8 *Copy_pu8PrevState);
+
 #endif
