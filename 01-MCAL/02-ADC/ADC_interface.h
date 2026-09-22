@@ -22,6 +22,5 @@
 
 void ADC_voidInit(void);
 u16 ADC_u16ReadSynchronus(u8 Copy_u8ChannelNum);
-u16 ADC_u16ReadAsynchronus(u8 Copy_u8ChannelNum, void (*Copy_pvCallBackFunctionPtr)(void));
 
 #endif
