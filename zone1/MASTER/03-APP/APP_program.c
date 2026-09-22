@@ -45,15 +45,9 @@ static u8  APP_u8LevelPrevState = BUTTON_RELEASED;
 
 static u8  APP_u8Zone1Level      = LED_u8_LEVEL_OFF;
 static u8  APP_u8Zone1Hold       = 0;
-static u8  APP_u8Zone1WasDetect  = 0;
 
 static u8  APP_u8Zone2Level = LED_u8_LEVEL_OFF;
 static u8  APP_u8Zone3Level = LED_u8_LEVEL_OFF;
-static u8  APP_u8Zone2PrevPin = 0;
-static u8  APP_u8Zone3PrevPin = 0;
-
-static u16 APP_u16DetectionCount = 0;
-static u8  APP_u8LoopTick = 0;
 
 void APP_voidSystemInit(void)
 {
@@ -85,12 +79,11 @@ void APP_voidControlLighting(void)
     u8  Local_u8StatusByte;
     u8  Local_u8Zone2Pin, Local_u8Zone3Pin;
 
-    /* فحص الزراير (مع حماية مؤقتة لعدم تهنيج الهاردوير) */
     if (BUTTON_u8GetPressEvent(&APP_strModeButton, &APP_u8ModePrevState) == BUTTON_PRESSED)
     {
         APP_u8Mode = (APP_u8Mode == APP_u8_MODE_AUTO) ? APP_u8_MODE_MANUAL : APP_u8_MODE_AUTO;
         APP_voidUpdateDisplay();
-        /* شيلنا الـ while من هنا مؤقتاً لحد ما الهاردوير يستقر */
+
     }
 
     if (APP_u8Mode == APP_u8_MODE_MANUAL)
@@ -130,16 +123,11 @@ void APP_voidControlLighting(void)
 
         if (Local_u16Distance != 0 && Local_u16Distance < APP_u16_DETECT_RANGE_CM)
         {
-            if (!APP_u8Zone1WasDetect) APP_u16DetectionCount++;
-            APP_u8Zone1WasDetect = 1;
-
             APP_u8Zone1Level = LED_u8_LEVEL_HIGH;
             APP_u8Zone1Hold = APP_u8_HOLD_LOOPS; /* شحن عداد الـ 3 ثواني */
         }
         else
         {
-            APP_u8Zone1WasDetect = 0;
-
             /* تشغيل التأخير */
             if (APP_u8Zone1Hold > 0)
             {
@@ -183,11 +171,6 @@ void APP_voidControlLighting(void)
             Local_u8Zone2Pin = DIO_voidGetPinValue(APP_u8_ZONE2_STATUS_PORT, APP_u8_ZONE2_STATUS_PIN);
             Local_u8Zone3Pin = DIO_voidGetPinValue(APP_u8_ZONE3_STATUS_PORT, APP_u8_ZONE3_STATUS_PIN);
 
-            if (Local_u8Zone2Pin && !APP_u8Zone2PrevPin) APP_u16DetectionCount++;
-            if (Local_u8Zone3Pin && !APP_u8Zone3PrevPin) APP_u16DetectionCount++;
-            APP_u8Zone2PrevPin = Local_u8Zone2Pin;
-            APP_u8Zone3PrevPin = Local_u8Zone3Pin;
-
             APP_u8Zone2Level = Local_u8Zone2Pin ? LED_u8_LEVEL_HIGH : LED_u8_LEVEL_LOW;
             APP_u8Zone3Level = Local_u8Zone3Pin ? LED_u8_LEVEL_HIGH : LED_u8_LEVEL_LOW;
         }
@@ -229,41 +212,7 @@ static u8 APP_u8ZoneLevelChar(u8 Copy_u8Level)
 
 void APP_voidUpdateDisplay(void)
 {
-    u8 Local_u8Cycle;
-
-    APP_u8LoopTick++;
-    Local_u8Cycle = APP_u8LoopTick % 40;
-
     LCD_voidClearDisplay();
-
-    /*
-    if (Local_u8Cycle == 20)
-    {
-        u8 Local_u8Saving = APP_u8EnergySavingPercent();
-        u8 Local_u8Buf[3];
-        //LCD_voidGotoXY(1, 0);
-       // LCD_voidWriteString((u8*)"ENERGY SAVING", 13);
-        LCD_voidGotoXY(2, 0);
-        Local_u8Buf[0] = (u8)('0' + (Local_u8Saving / 10));
-        Local_u8Buf[1] = (u8)('0' + (Local_u8Saving % 10));
-        Local_u8Buf[2] = '%';
-        LCD_voidWriteString(Local_u8Buf, 3);
-        return;
-    }
-    */
-    if (Local_u8Cycle == 0)
-    {
-        u8 Local_u8Buf[5];
-        LCD_voidGotoXY(1, 0);
-        LCD_voidWriteString((u8*)"DETECTIONS", 10);
-        LCD_voidGotoXY(2, 0);
-        Local_u8Buf[0] = (u8)('0' + ((APP_u16DetectionCount / 1000) % 10));
-        Local_u8Buf[1] = (u8)('0' + ((APP_u16DetectionCount / 100)  % 10));
-        Local_u8Buf[2] = (u8)('0' + ((APP_u16DetectionCount / 10)   % 10));
-        Local_u8Buf[3] = (u8)('0' + ( APP_u16DetectionCount         % 10));
-        LCD_voidWriteString(Local_u8Buf, 4);
-        return;
-    }
 
     LCD_voidGotoXY(1, 0);
     if (APP_u8Mode == APP_u8_MODE_MANUAL)
