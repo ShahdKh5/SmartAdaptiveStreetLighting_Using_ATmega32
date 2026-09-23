@@ -34,24 +34,24 @@ u16 ULTRASONIC_u16GetDistance(const ULTRASONIC_Config_t *Copy_pstrConfig)
 
     ULTRASONIC_voidTrigger(Copy_pstrConfig);
 
-    /* 1. تهيئة التايمر وضبط الالتقاط مع الحافة الصاعدة ومسح العلم */
+    /* 1. Timer initialization, edge select (rising edge), and flag clearing */
     TIMER1_voidInit();
     TIMER1_voidSetICUEdgeTrigger(TIMER1_ICU_RISING_EDGE);
     TIMER1_voidClearICUFlag();
 
-    /* 2. انتظار الحافة الصاعدة */
+    /* 2. Wait for rising edge */
     while (TIMER1_u8GetICUFlag() == 0)
     {
         Local_u32Timeout++;
         if (Local_u32Timeout > 100000UL) { TIMER1_voidStop(); return 999; }
     }
 
-    /* 3. تصفير العداد وتغيير الالتقاط للحافة الهابطة ومسح العلم */
+    /* 3. Reset the counter, change capture to falling edge, and clear the flag */
     TIMER1_voidSetTimerValue(0);
     TIMER1_voidSetICUEdgeTrigger(TIMER1_ICU_FALLING_EDGE);
     TIMER1_voidClearICUFlag();
 
-    /* 4. انتظار الحافة الهابطة */
+    /* 4. Wait for falling edge */
     Local_u32Timeout = 0;
     while (TIMER1_u8GetICUFlag() == 0)
     {
@@ -59,9 +59,45 @@ u16 ULTRASONIC_u16GetDistance(const ULTRASONIC_Config_t *Copy_pstrConfig)
         if (Local_u32Timeout > 100000UL) { TIMER1_voidStop(); return 999; }
     }
 
-    /* 5. قراءة الزمن وإيقاف التايمر */
+    /* 5. Read time and stop timer */
     Local_u16EchoTime = TIMER1_u16GetICUValue();
     TIMER1_voidStop();
 
     return (Local_u16EchoTime / 58);
+}
+
+u16 ULTRASONIC_u16GetFilteredDistance(const ULTRASONIC_Config_t *Copy_pstrConfig)
+{
+    u16 Local_u16Readings[5];
+    u16 Local_u16Sum = 0;
+    u16 Local_u16Max = 0;
+    u16 Local_u16Min = 0xFFFF; /* A very large number so that the first reading is the smallest */
+    u8 i;
+
+    /* 1. Take 5 consecutive readings */
+    for (i = 0; i < 5; i++)
+    {
+        Local_u16Readings[i] = ULTRASONIC_u16GetDistance(Copy_pstrConfig);
+        Local_u16Sum += Local_u16Readings[i];
+
+        /* 2. Find the maximum value */
+        if (Local_u16Readings[i] > Local_u16Max)
+        {
+            Local_u16Max = Local_u16Readings[i];
+        }
+
+        /* 3. Find the minimum value */
+        if (Local_u16Readings[i] < Local_u16Min)
+        {
+            Local_u16Min = Local_u16Readings[i];
+        }
+
+        /* Very short delay between readings to give the sensor time to send the wave */
+        _delay_ms(5);
+    }
+
+    /* 4. Subtract the maximum and minimum values from the sum, and divide the remainder by 3 */
+    Local_u16Sum = Local_u16Sum - Local_u16Max - Local_u16Min;
+
+    return (Local_u16Sum / 3);
 }
