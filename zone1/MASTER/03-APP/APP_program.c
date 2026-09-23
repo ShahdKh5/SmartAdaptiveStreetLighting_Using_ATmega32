@@ -214,13 +214,14 @@ void APP_voidUpdateDisplay(void)
 {
     LCD_voidClearDisplay();
 
-    LCD_voidGotoXY(1, 0);
-    if (APP_u8Mode == APP_u8_MODE_MANUAL)
-    {
-        u8 Local_u8Buf[9];
-        Local_u8Buf[0]='M';Local_u8Buf[1]='A';Local_u8Buf[2]='N';Local_u8Buf[3]='U';Local_u8Buf[4]='A';Local_u8Buf[5]='L';
-        Local_u8Buf[6]=' ';Local_u8Buf[7]='Z';Local_u8Buf[8]=(u8)('1'+APP_u8ManualZone);
-        LCD_voidWriteString(Local_u8Buf, 9);
+   LCD_voidGotoXY(1, 0);
+   if (APP_u8Mode == APP_u8_MODE_MANUAL)
+   {
+     u8 Local_u8Buf[10];  
+     Local_u8Buf[0]='M';Local_u8Buf[1]='A';Local_u8Buf[2]='N';Local_u8Buf[3]='U';Local_u8Buf[4]='A';Local_u8Buf[5]='L';
+     Local_u8Buf[6]=' ';Local_u8Buf[7]='Z';Local_u8Buf[8]=(u8)('1'+APP_u8ManualZone);
+     Local_u8Buf[9]='\0'; 
+    LCD_voidWriteString(Local_u8Buf);
     }
     else if (APP_u8Zone1Level==LED_u8_LEVEL_OFF && APP_u8Zone2Level==LED_u8_LEVEL_OFF && APP_u8Zone3Level==LED_u8_LEVEL_OFF)
     {
@@ -232,13 +233,13 @@ void APP_voidUpdateDisplay(void)
     }
 
     LCD_voidGotoXY(2, 0);
-    {
-        u8 Local_u8Buf[14];
-        Local_u8Buf[0]='Z';Local_u8Buf[1]='1';Local_u8Buf[2]=':';Local_u8Buf[3]=APP_u8ZoneLevelChar(APP_u8Zone1Level);
-        Local_u8Buf[4]=' ';
-        Local_u8Buf[5]='Z';Local_u8Buf[6]='2';Local_u8Buf[7]=':';Local_u8Buf[8]=APP_u8ZoneLevelChar(APP_u8Zone2Level);
-        Local_u8Buf[9]=' ';
-        Local_u8Buf[10]='Z';Local_u8Buf[11]='3';Local_u8Buf[12]=':';Local_u8Buf[13]=APP_u8ZoneLevelChar(APP_u8Zone3Level);
-        LCD_voidWriteString(Local_u8Buf, 14);
-    }
+{
+    u8 Local_u8Buf[15];  
+    Local_u8Buf[0]='Z';Local_u8Buf[1]='1';Local_u8Buf[2]=':';Local_u8Buf[3]=APP_u8ZoneLevelChar(APP_u8Zone1Level);
+    Local_u8Buf[4]=' ';
+    Local_u8Buf[5]='Z';Local_u8Buf[6]='2';Local_u8Buf[7]=':';Local_u8Buf[8]=APP_u8ZoneLevelChar(APP_u8Zone2Level);
+    Local_u8Buf[9]=' ';
+    Local_u8Buf[10]='Z';Local_u8Buf[11]='3';Local_u8Buf[12]=':';Local_u8Buf[13]=APP_u8ZoneLevelChar(APP_u8Zone3Level);
+    Local_u8Buf[14]='\0';   
+    LCD_voidWriteString(Local_u8Buf);
 }
