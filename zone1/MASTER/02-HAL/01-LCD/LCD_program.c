@@ -38,56 +38,6 @@ void LCD_voidInit(void)
     _delay_ms(2);
 }
 
-
-void LCD_voidSendInstruction(u8 Copy_u8instruction)
-{
-    /* RS = 0 -> Command */
-    DIO_voidSetPinValue(
-        LCD_u8_CTRL_PORT,
-        LCD_u8_RSPIN,
-        DIO_u8_LOW
-    );
-
-    /* RW = 0 -> Write */
-    DIO_voidSetPinValue(
-        LCD_u8_CTRL_PORT,
-        LCD_u8_RWPIN,
-        DIO_u8_LOW
-    );
-
-    /* E = LOW before changing data */
-    DIO_voidSetPinValue(
-        LCD_u8_CTRL_PORT,
-        LCD_u8_EPIN,
-        DIO_u8_LOW
-    );
-
-    /* Put command on data pins */
-    DIO_voidSetPortValue(
-        LCD_u8_DATA_PORT,
-        Copy_u8instruction
-    );
-
-    /* Enable pulse */
-    DIO_voidSetPinValue(
-        LCD_u8_CTRL_PORT,
-        LCD_u8_EPIN,
-        DIO_u8_HIGH
-    );
-
-    _delay_us(10);
-
-    DIO_voidSetPinValue(
-        LCD_u8_CTRL_PORT,
-        LCD_u8_EPIN,
-        DIO_u8_LOW
-    );
-
-    /* Command execution time */
-    _delay_ms(2);
-}
-
-
 void LCD_voidWriteChar(u8 Copy_u8Data)
 {
     /* RS = 1 -> Data */
