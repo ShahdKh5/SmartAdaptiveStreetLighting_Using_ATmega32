@@ -1,0 +1,1100 @@
+
+zone23.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000057a  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000006  00800060  0000057a  0000060e  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000002  00800066  00800066  00000614  2**0
+                  ALLOC
+  3 .stab         0000174c  00000000  00000000  00000614  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  4 .stabstr      00001245  00000000  00000000  00001d60  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+   8:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+   c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  10:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  14:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  18:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  1c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  20:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  24:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  28:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  2c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  30:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  34:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  38:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  3c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  40:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  44:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  48:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  4c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  50:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_copy_data>:
+  60:	10 e0       	ldi	r17, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	ea e7       	ldi	r30, 0x7A	; 122
+  68:	f5 e0       	ldi	r31, 0x05	; 5
+  6a:	02 c0       	rjmp	.+4      	; 0x70 <.do_copy_data_start>
+
+0000006c <.do_copy_data_loop>:
+  6c:	05 90       	lpm	r0, Z+
+  6e:	0d 92       	st	X+, r0
+
+00000070 <.do_copy_data_start>:
+  70:	a6 36       	cpi	r26, 0x66	; 102
+  72:	b1 07       	cpc	r27, r17
+  74:	d9 f7       	brne	.-10     	; 0x6c <.do_copy_data_loop>
+
+00000076 <__do_clear_bss>:
+  76:	10 e0       	ldi	r17, 0x00	; 0
+  78:	a6 e6       	ldi	r26, 0x66	; 102
+  7a:	b0 e0       	ldi	r27, 0x00	; 0
+  7c:	01 c0       	rjmp	.+2      	; 0x80 <.do_clear_bss_start>
+
+0000007e <.do_clear_bss_loop>:
+  7e:	1d 92       	st	X+, r1
+
+00000080 <.do_clear_bss_start>:
+  80:	a8 36       	cpi	r26, 0x68	; 104
+  82:	b1 07       	cpc	r27, r17
+  84:	e1 f7       	brne	.-8      	; 0x7e <.do_clear_bss_loop>
+  86:	0e 94 a7 00 	call	0x14e	; 0x14e <main>
+  8a:	0c 94 bb 02 	jmp	0x576	; 0x576 <_exit>
+
+0000008e <__bad_interrupt>:
+  8e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000092 <APP_voidControlLighting>:
+    DIO_voidSetPinDirection(APP_u8_STATUS_OUT_PORT, APP_u8_STATUS_OUT_PIN, DIO_u8_OUTPUT);
+    DIO_voidSetPinValue(APP_u8_STATUS_OUT_PORT, APP_u8_STATUS_OUT_PIN, DIO_u8_LOW);
+}
+
+void APP_voidControlLighting(void)
+{
+  92:	1f 93       	push	r17
+  94:	10 c0       	rjmp	.+32     	; 0xb6 <APP_voidControlLighting+0x24>
+    u8  Local_u8Level;
+
+    /* 1. استقبال الرسايل (استخدمنا while عشان نصطاد كل الداتا من غير تهنيج) */
+    while (USART_u8IsDataAvailable())
+    {
+        APP_u8LastStatusByte = USART_u8ReceiveByte();
+  96:	0e 94 61 01 	call	0x2c2	; 0x2c2 <USART_u8ReceiveByte>
+  9a:	98 2f       	mov	r25, r24
+  9c:	80 93 60 00 	sts	0x0060, r24
+        u8 Tmp_Manual = (APP_u8LastStatusByte >> LINK_u8_MANUAL_BIT) & 0x01;
+        u8 Tmp_Zone   = (APP_u8LastStatusByte >> LINK_u8_ZONE_SHIFT)  & LINK_u8_ZONE_MASK;
+        u8 Tmp_Level  = (APP_u8LastStatusByte >> LINK_u8_LEVEL_SHIFT) & LINK_u8_LEVEL_MASK;
+
+        /* هنا الـ Hardcode بتاع زون 3 (رقم 2) */
+        if (Tmp_Manual && (Tmp_Zone == SLAVE_u8_MY_ZONE))
+  a0:	86 ff       	sbrs	r24, 6
+  a2:	09 c0       	rjmp	.+18     	; 0xb6 <APP_voidControlLighting+0x24>
+  a4:	82 95       	swap	r24
+  a6:	83 70       	andi	r24, 0x03	; 3
+  a8:	81 30       	cpi	r24, 0x01	; 1
+  aa:	29 f4       	brne	.+10     	; 0xb6 <APP_voidControlLighting+0x24>
+        {
+            APP_u8SavedManualLevel = Tmp_Level; /* احفظ الإضاءة دي فوراً */
+  ac:	96 95       	lsr	r25
+  ae:	96 95       	lsr	r25
+  b0:	93 70       	andi	r25, 0x03	; 3
+  b2:	90 93 67 00 	sts	0x0067, r25
+    u8  Local_u8Night, Local_u8Manual;
+    u16 Local_u16Distance;
+    u8  Local_u8Level;
+
+    /* 1. استقبال الرسايل (استخدمنا while عشان نصطاد كل الداتا من غير تهنيج) */
+    while (USART_u8IsDataAvailable())
+  b6:	0e 94 5c 01 	call	0x2b8	; 0x2b8 <USART_u8IsDataAvailable>
+  ba:	88 23       	and	r24, r24
+  bc:	61 f7       	brne	.-40     	; 0x96 <APP_voidControlLighting+0x4>
+            APP_u8SavedManualLevel = Tmp_Level; /* احفظ الإضاءة دي فوراً */
+        }
+    }
+
+    /* 2. تحديث حالة الليل والمانيوال العامة */
+    Local_u8Night  = (APP_u8LastStatusByte >> LINK_u8_NIGHT_BIT)  & 0x01;
+  be:	80 91 60 00 	lds	r24, 0x0060
+    Local_u8Manual = (APP_u8LastStatusByte >> LINK_u8_MANUAL_BIT) & 0x01;
+
+    /* 3. تنفيذ الإضاءة */
+    if (Local_u8Manual)
+  c2:	86 ff       	sbrs	r24, 6
+  c4:	05 c0       	rjmp	.+10     	; 0xd0 <APP_voidControlLighting+0x3e>
+    {
+        Local_u8Level = APP_u8SavedManualLevel; /* استخدم النور المحفوظ بثبات */
+  c6:	10 91 67 00 	lds	r17, 0x0067
+        APP_u8Hold = 0;
+  ca:	10 92 66 00 	sts	0x0066, r1
+  ce:	19 c0       	rjmp	.+50     	; 0x102 <APP_voidControlLighting+0x70>
+    }
+    else if (!Local_u8Night)
+  d0:	87 fd       	sbrc	r24, 7
+  d2:	04 c0       	rjmp	.+8      	; 0xdc <APP_voidControlLighting+0x4a>
+    {
+        Local_u8Level = LED_u8_LEVEL_OFF;
+        APP_u8Hold = 0;
+  d4:	10 92 66 00 	sts	0x0066, r1
+  d8:	10 e0       	ldi	r17, 0x00	; 0
+  da:	13 c0       	rjmp	.+38     	; 0x102 <APP_voidControlLighting+0x70>
+    }
+    else
+    {
+        Local_u16Distance = ULTRASONIC_u16GetDistance(&APP_strUltrasonic);
+  dc:	82 e6       	ldi	r24, 0x62	; 98
+  de:	90 e0       	ldi	r25, 0x00	; 0
+  e0:	0e 94 e0 00 	call	0x1c0	; 0x1c0 <ULTRASONIC_u16GetDistance>
+
+        if (Local_u16Distance != 0 && Local_u16Distance < APP_u16_DETECT_RANGE_CM)
+  e4:	01 97       	sbiw	r24, 0x01	; 1
+  e6:	43 97       	sbiw	r24, 0x13	; 19
+  e8:	10 f4       	brcc	.+4      	; 0xee <APP_voidControlLighting+0x5c>
+        {
+            Local_u8Level = LED_u8_LEVEL_HIGH;
+            APP_u8Hold = APP_u8_HOLD_LOOPS;
+  ea:	85 e0       	ldi	r24, 0x05	; 5
+  ec:	07 c0       	rjmp	.+14     	; 0xfc <APP_voidControlLighting+0x6a>
+        }
+        else
+        {
+            if (APP_u8Hold > 0)
+  ee:	80 91 66 00 	lds	r24, 0x0066
+  f2:	88 23       	and	r24, r24
+  f4:	11 f4       	brne	.+4      	; 0xfa <APP_voidControlLighting+0x68>
+  f6:	11 e0       	ldi	r17, 0x01	; 1
+  f8:	04 c0       	rjmp	.+8      	; 0x102 <APP_voidControlLighting+0x70>
+            {
+                Local_u8Level = LED_u8_LEVEL_HIGH;
+                APP_u8Hold--;
+  fa:	81 50       	subi	r24, 0x01	; 1
+  fc:	80 93 66 00 	sts	0x0066, r24
+ 100:	12 e0       	ldi	r17, 0x02	; 2
+        }
+    }
+
+    /* 4. الحماية من رعشة الليدات السريعة (نور الأفراح) */
+    static u8 APP_u8LastAppliedLevel = 255;
+    if (Local_u8Level != APP_u8LastAppliedLevel)
+ 102:	80 91 61 00 	lds	r24, 0x0061
+ 106:	18 17       	cp	r17, r24
+ 108:	69 f0       	breq	.+26     	; 0x124 <APP_voidControlLighting+0x92>
+    {
+        LED_voidSetLevel(Local_u8Level);
+ 10a:	81 2f       	mov	r24, r17
+ 10c:	0e 94 b7 00 	call	0x16e	; 0x16e <LED_voidSetLevel>
+        DIO_voidSetPinValue(APP_u8_STATUS_OUT_PORT, APP_u8_STATUS_OUT_PIN,
+ 110:	40 e0       	ldi	r20, 0x00	; 0
+ 112:	12 30       	cpi	r17, 0x02	; 2
+ 114:	09 f4       	brne	.+2      	; 0x118 <APP_voidControlLighting+0x86>
+ 116:	41 e0       	ldi	r20, 0x01	; 1
+ 118:	83 e0       	ldi	r24, 0x03	; 3
+ 11a:	64 e0       	ldi	r22, 0x04	; 4
+ 11c:	0e 94 f7 01 	call	0x3ee	; 0x3ee <DIO_voidSetPinValue>
+                            (Local_u8Level == LED_u8_LEVEL_HIGH) ? DIO_u8_HIGH : DIO_u8_LOW);
+
+        APP_u8LastAppliedLevel = Local_u8Level;
+ 120:	10 93 61 00 	sts	0x0061, r17
+    }
+}
+ 124:	1f 91       	pop	r17
+ 126:	08 95       	ret
+
+00000128 <APP_voidSystemInit>:
+static u8 APP_u8Hold           = 0;
+
+
+void APP_voidSystemInit(void)
+{
+    LED_voidInit();            /* also inits Timer0 PWM on PB3 */
+ 128:	0e 94 c3 00 	call	0x186	; 0x186 <LED_voidInit>
+    USART_voidInit();
+ 12c:	0e 94 50 01 	call	0x2a0	; 0x2a0 <USART_voidInit>
+    ULTRASONIC_voidInit(&APP_strUltrasonic);
+ 130:	82 e6       	ldi	r24, 0x62	; 98
+ 132:	90 e0       	ldi	r25, 0x00	; 0
+ 134:	0e 94 38 01 	call	0x270	; 0x270 <ULTRASONIC_voidInit>
+    DIO_voidSetPinDirection(APP_u8_STATUS_OUT_PORT, APP_u8_STATUS_OUT_PIN, DIO_u8_OUTPUT);
+ 138:	83 e0       	ldi	r24, 0x03	; 3
+ 13a:	64 e0       	ldi	r22, 0x04	; 4
+ 13c:	41 e0       	ldi	r20, 0x01	; 1
+ 13e:	0e 94 89 01 	call	0x312	; 0x312 <DIO_voidSetPinDirection>
+    DIO_voidSetPinValue(APP_u8_STATUS_OUT_PORT, APP_u8_STATUS_OUT_PIN, DIO_u8_LOW);
+ 142:	83 e0       	ldi	r24, 0x03	; 3
+ 144:	64 e0       	ldi	r22, 0x04	; 4
+ 146:	40 e0       	ldi	r20, 0x00	; 0
+ 148:	0e 94 f7 01 	call	0x3ee	; 0x3ee <DIO_voidSetPinValue>
+}
+ 14c:	08 95       	ret
+
+0000014e <main>:
+#include <util/delay.h>
+#include "../01-MCAL/00-LIB/STD_TYPES.h"
+#include "APP_interface.h"
+
+int main(void)
+{
+ 14e:	cf 93       	push	r28
+ 150:	df 93       	push	r29
+    /* تهيئة جميع مكونات السليف بما فيها الألتراسونيك والـ USART */
+    APP_voidSystemInit();
+ 152:	0e 94 94 00 	call	0x128	; 0x128 <APP_voidSystemInit>
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+ 156:	c8 ec       	ldi	r28, 0xC8	; 200
+ 158:	d0 e0       	ldi	r29, 0x00	; 0
+
+    while (1)
+    {
+        /* تنفيذ أوامر الإضاءة واستقبال إشارات الماستر */
+        APP_voidControlLighting();
+ 15a:	0e 94 49 00 	call	0x92	; 0x92 <APP_voidControlLighting>
+ 15e:	84 ef       	ldi	r24, 0xF4	; 244
+ 160:	91 e0       	ldi	r25, 0x01	; 1
+ 162:	fe 01       	movw	r30, r28
+ 164:	31 97       	sbiw	r30, 0x01	; 1
+ 166:	f1 f7       	brne	.-4      	; 0x164 <main+0x16>
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 168:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 16a:	d9 f7       	brne	.-10     	; 0x162 <main+0x14>
+ 16c:	f6 cf       	rjmp	.-20     	; 0x15a <main+0xc>
+
+0000016e <LED_voidSetLevel>:
+}
+
+void LED_voidSetLevel(u8 Copy_u8Level)
+{
+    u8 Local_u8Duty;
+    switch (Copy_u8Level)
+ 16e:	81 30       	cpi	r24, 0x01	; 1
+ 170:	21 f0       	breq	.+8      	; 0x17a <LED_voidSetLevel+0xc>
+ 172:	82 30       	cpi	r24, 0x02	; 2
+ 174:	21 f4       	brne	.+8      	; 0x17e <LED_voidSetLevel+0x10>
+ 176:	86 ee       	ldi	r24, 0xE6	; 230
+ 178:	03 c0       	rjmp	.+6      	; 0x180 <LED_voidSetLevel+0x12>
+ 17a:	80 e4       	ldi	r24, 0x40	; 64
+ 17c:	01 c0       	rjmp	.+2      	; 0x180 <LED_voidSetLevel+0x12>
+ 17e:	80 e0       	ldi	r24, 0x00	; 0
+    {
+        case LED_u8_LEVEL_LOW:  Local_u8Duty = LED_u8_DUTY_LOW;  break;
+        case LED_u8_LEVEL_HIGH: Local_u8Duty = LED_u8_DUTY_HIGH; break;
+        default:                Local_u8Duty = LED_u8_DUTY_OFF;  break;
+    }
+    TIMER_voidTimer0SetCompareValue(Local_u8Duty);
+ 180:	0e 94 87 01 	call	0x30e	; 0x30e <TIMER_voidTimer0SetCompareValue>
+}
+ 184:	08 95       	ret
+
+00000186 <LED_voidInit>:
+#define LED_u8_DUTY_LOW   64    /* ~25% of 255 */
+#define LED_u8_DUTY_HIGH  230   /* ~90% of 255 */
+
+void LED_voidInit(void)
+{
+    DIO_voidSetPinDirection(LED_u8_OC0_PORT, LED_u8_OC0_PIN, DIO_u8_OUTPUT);
+ 186:	81 e0       	ldi	r24, 0x01	; 1
+ 188:	63 e0       	ldi	r22, 0x03	; 3
+ 18a:	41 e0       	ldi	r20, 0x01	; 1
+ 18c:	0e 94 89 01 	call	0x312	; 0x312 <DIO_voidSetPinDirection>
+    TIMER_voidTimer0Init();
+ 190:	0e 94 83 01 	call	0x306	; 0x306 <TIMER_voidTimer0Init>
+}
+ 194:	08 95       	ret
+
+00000196 <ULTRASONIC_voidTrigger>:
+    DIO_voidSetPinDirection(Copy_pstrConfig->EchoPort, Copy_pstrConfig->EchoPin, DIO_u8_INPUT);
+    DIO_voidSetPinValue(Copy_pstrConfig->TrigPort, Copy_pstrConfig->TrigPin, DIO_u8_LOW);
+}
+
+void ULTRASONIC_voidTrigger(const ULTRASONIC_Config_t *Copy_pstrConfig)
+{
+ 196:	0f 93       	push	r16
+ 198:	1f 93       	push	r17
+ 19a:	8c 01       	movw	r16, r24
+    DIO_voidSetPinValue(Copy_pstrConfig->TrigPort, Copy_pstrConfig->TrigPin, DIO_u8_HIGH);
+ 19c:	fc 01       	movw	r30, r24
+ 19e:	80 81       	ld	r24, Z
+ 1a0:	61 81       	ldd	r22, Z+1	; 0x01
+ 1a2:	41 e0       	ldi	r20, 0x01	; 1
+ 1a4:	0e 94 f7 01 	call	0x3ee	; 0x3ee <DIO_voidSetPinValue>
+    can be achieved.
+*/
+void
+_delay_loop_1(uint8_t __count)
+{
+	__asm__ volatile (
+ 1a8:	8a e1       	ldi	r24, 0x1A	; 26
+ 1aa:	8a 95       	dec	r24
+ 1ac:	f1 f7       	brne	.-4      	; 0x1aa <ULTRASONIC_voidTrigger+0x14>
+    _delay_us(10);
+    DIO_voidSetPinValue(Copy_pstrConfig->TrigPort, Copy_pstrConfig->TrigPin, DIO_u8_LOW);
+ 1ae:	f8 01       	movw	r30, r16
+ 1b0:	80 81       	ld	r24, Z
+ 1b2:	61 81       	ldd	r22, Z+1	; 0x01
+ 1b4:	40 e0       	ldi	r20, 0x00	; 0
+ 1b6:	0e 94 f7 01 	call	0x3ee	; 0x3ee <DIO_voidSetPinValue>
+}
+ 1ba:	1f 91       	pop	r17
+ 1bc:	0f 91       	pop	r16
+ 1be:	08 95       	ret
+
+000001c0 <ULTRASONIC_u16GetDistance>:
+
+u16 ULTRASONIC_u16GetDistance(const ULTRASONIC_Config_t *Copy_pstrConfig)
+{
+ 1c0:	ef 92       	push	r14
+ 1c2:	ff 92       	push	r15
+ 1c4:	0f 93       	push	r16
+ 1c6:	1f 93       	push	r17
+    u16 Local_u16EchoTime = 0;
+    u32 Local_u32Timeout = 0;
+
+    ULTRASONIC_voidTrigger(Copy_pstrConfig);
+ 1c8:	0e 94 cb 00 	call	0x196	; 0x196 <ULTRASONIC_voidTrigger>
+
+    /* 1. تهيئة التايمر وضبط الالتقاط مع الحافة الصاعدة ومسح العلم */
+    TIMER1_voidInit();
+ 1cc:	0e 94 65 01 	call	0x2ca	; 0x2ca <TIMER1_voidInit>
+    TIMER1_voidSetICUEdgeTrigger(TIMER1_ICU_RISING_EDGE);
+ 1d0:	81 e0       	ldi	r24, 0x01	; 1
+ 1d2:	0e 94 69 01 	call	0x2d2	; 0x2d2 <TIMER1_voidSetICUEdgeTrigger>
+    TIMER1_voidClearICUFlag();
+ 1d6:	0e 94 72 01 	call	0x2e4	; 0x2e4 <TIMER1_voidClearICUFlag>
+ 1da:	ee 24       	eor	r14, r14
+ 1dc:	ff 24       	eor	r15, r15
+ 1de:	87 01       	movw	r16, r14
+ 1e0:	0e c0       	rjmp	.+28     	; 0x1fe <ULTRASONIC_u16GetDistance+0x3e>
+
+    /* 2. انتظار الحافة الصاعدة */
+    while (TIMER1_u8GetICUFlag() == 0)
+    {
+        Local_u32Timeout++;
+ 1e2:	08 94       	sec
+ 1e4:	e1 1c       	adc	r14, r1
+ 1e6:	f1 1c       	adc	r15, r1
+ 1e8:	01 1d       	adc	r16, r1
+ 1ea:	11 1d       	adc	r17, r1
+        if (Local_u32Timeout > 100000UL) { TIMER1_voidStop(); return 999; }
+ 1ec:	81 ea       	ldi	r24, 0xA1	; 161
+ 1ee:	e8 16       	cp	r14, r24
+ 1f0:	86 e8       	ldi	r24, 0x86	; 134
+ 1f2:	f8 06       	cpc	r15, r24
+ 1f4:	81 e0       	ldi	r24, 0x01	; 1
+ 1f6:	08 07       	cpc	r16, r24
+ 1f8:	80 e0       	ldi	r24, 0x00	; 0
+ 1fa:	18 07       	cpc	r17, r24
+ 1fc:	f9 f0       	breq	.+62     	; 0x23c <ULTRASONIC_u16GetDistance+0x7c>
+    TIMER1_voidInit();
+    TIMER1_voidSetICUEdgeTrigger(TIMER1_ICU_RISING_EDGE);
+    TIMER1_voidClearICUFlag();
+
+    /* 2. انتظار الحافة الصاعدة */
+    while (TIMER1_u8GetICUFlag() == 0)
+ 1fe:	0e 94 75 01 	call	0x2ea	; 0x2ea <TIMER1_u8GetICUFlag>
+ 202:	88 23       	and	r24, r24
+ 204:	71 f3       	breq	.-36     	; 0x1e2 <ULTRASONIC_u16GetDistance+0x22>
+        Local_u32Timeout++;
+        if (Local_u32Timeout > 100000UL) { TIMER1_voidStop(); return 999; }
+    }
+
+    /* 3. تصفير العداد وتغيير الالتقاط للحافة الهابطة ومسح العلم */
+    TIMER1_voidSetTimerValue(0);
+ 206:	80 e0       	ldi	r24, 0x00	; 0
+ 208:	90 e0       	ldi	r25, 0x00	; 0
+ 20a:	0e 94 7e 01 	call	0x2fc	; 0x2fc <TIMER1_voidSetTimerValue>
+    TIMER1_voidSetICUEdgeTrigger(TIMER1_ICU_FALLING_EDGE);
+ 20e:	80 e0       	ldi	r24, 0x00	; 0
+ 210:	0e 94 69 01 	call	0x2d2	; 0x2d2 <TIMER1_voidSetICUEdgeTrigger>
+    TIMER1_voidClearICUFlag();
+ 214:	0e 94 72 01 	call	0x2e4	; 0x2e4 <TIMER1_voidClearICUFlag>
+ 218:	ee 24       	eor	r14, r14
+ 21a:	ff 24       	eor	r15, r15
+ 21c:	87 01       	movw	r16, r14
+ 21e:	13 c0       	rjmp	.+38     	; 0x246 <ULTRASONIC_u16GetDistance+0x86>
+
+    /* 4. انتظار الحافة الهابطة */
+    Local_u32Timeout = 0;
+    while (TIMER1_u8GetICUFlag() == 0)
+    {
+        Local_u32Timeout++;
+ 220:	08 94       	sec
+ 222:	e1 1c       	adc	r14, r1
+ 224:	f1 1c       	adc	r15, r1
+ 226:	01 1d       	adc	r16, r1
+ 228:	11 1d       	adc	r17, r1
+        if (Local_u32Timeout > 100000UL) { TIMER1_voidStop(); return 999; }
+ 22a:	81 ea       	ldi	r24, 0xA1	; 161
+ 22c:	e8 16       	cp	r14, r24
+ 22e:	86 e8       	ldi	r24, 0x86	; 134
+ 230:	f8 06       	cpc	r15, r24
+ 232:	81 e0       	ldi	r24, 0x01	; 1
+ 234:	08 07       	cpc	r16, r24
+ 236:	80 e0       	ldi	r24, 0x00	; 0
+ 238:	18 07       	cpc	r17, r24
+ 23a:	29 f4       	brne	.+10     	; 0x246 <ULTRASONIC_u16GetDistance+0x86>
+ 23c:	0e 94 81 01 	call	0x302	; 0x302 <TIMER1_voidStop>
+ 240:	27 ee       	ldi	r18, 0xE7	; 231
+ 242:	33 e0       	ldi	r19, 0x03	; 3
+ 244:	0f c0       	rjmp	.+30     	; 0x264 <ULTRASONIC_u16GetDistance+0xa4>
+    TIMER1_voidSetICUEdgeTrigger(TIMER1_ICU_FALLING_EDGE);
+    TIMER1_voidClearICUFlag();
+
+    /* 4. انتظار الحافة الهابطة */
+    Local_u32Timeout = 0;
+    while (TIMER1_u8GetICUFlag() == 0)
+ 246:	0e 94 75 01 	call	0x2ea	; 0x2ea <TIMER1_u8GetICUFlag>
+ 24a:	88 23       	and	r24, r24
+ 24c:	49 f3       	breq	.-46     	; 0x220 <ULTRASONIC_u16GetDistance+0x60>
+        Local_u32Timeout++;
+        if (Local_u32Timeout > 100000UL) { TIMER1_voidStop(); return 999; }
+    }
+
+    /* 5. قراءة الزمن وإيقاف التايمر */
+    Local_u16EchoTime = TIMER1_u16GetICUValue();
+ 24e:	0e 94 7a 01 	call	0x2f4	; 0x2f4 <TIMER1_u16GetICUValue>
+ 252:	8c 01       	movw	r16, r24
+    TIMER1_voidStop();
+ 254:	0e 94 81 01 	call	0x302	; 0x302 <TIMER1_voidStop>
+
+    return (Local_u16EchoTime / 58);
+ 258:	c8 01       	movw	r24, r16
+ 25a:	6a e3       	ldi	r22, 0x3A	; 58
+ 25c:	70 e0       	ldi	r23, 0x00	; 0
+ 25e:	0e 94 a7 02 	call	0x54e	; 0x54e <__udivmodhi4>
+ 262:	9b 01       	movw	r18, r22
+}
+ 264:	c9 01       	movw	r24, r18
+ 266:	1f 91       	pop	r17
+ 268:	0f 91       	pop	r16
+ 26a:	ff 90       	pop	r15
+ 26c:	ef 90       	pop	r14
+ 26e:	08 95       	ret
+
+00000270 <ULTRASONIC_voidInit>:
+   sensor, wait for its own Echo to rise, then time how long it stays HIGH
+   in 1us steps. Timeout protects the loop if no echo ever returns. */
+#define ULTRASONIC_u32_TIMEOUT_US   30000UL   /* ~5 m round trip */
+
+void ULTRASONIC_voidInit(const ULTRASONIC_Config_t *Copy_pstrConfig)
+{
+ 270:	0f 93       	push	r16
+ 272:	1f 93       	push	r17
+ 274:	8c 01       	movw	r16, r24
+    DIO_voidSetPinDirection(Copy_pstrConfig->TrigPort, Copy_pstrConfig->TrigPin, DIO_u8_OUTPUT);
+ 276:	fc 01       	movw	r30, r24
+ 278:	80 81       	ld	r24, Z
+ 27a:	61 81       	ldd	r22, Z+1	; 0x01
+ 27c:	41 e0       	ldi	r20, 0x01	; 1
+ 27e:	0e 94 89 01 	call	0x312	; 0x312 <DIO_voidSetPinDirection>
+    DIO_voidSetPinDirection(Copy_pstrConfig->EchoPort, Copy_pstrConfig->EchoPin, DIO_u8_INPUT);
+ 282:	f8 01       	movw	r30, r16
+ 284:	82 81       	ldd	r24, Z+2	; 0x02
+ 286:	63 81       	ldd	r22, Z+3	; 0x03
+ 288:	40 e0       	ldi	r20, 0x00	; 0
+ 28a:	0e 94 89 01 	call	0x312	; 0x312 <DIO_voidSetPinDirection>
+    DIO_voidSetPinValue(Copy_pstrConfig->TrigPort, Copy_pstrConfig->TrigPin, DIO_u8_LOW);
+ 28e:	f8 01       	movw	r30, r16
+ 290:	80 81       	ld	r24, Z
+ 292:	61 81       	ldd	r22, Z+1	; 0x01
+ 294:	40 e0       	ldi	r20, 0x00	; 0
+ 296:	0e 94 f7 01 	call	0x3ee	; 0x3ee <DIO_voidSetPinValue>
+}
+ 29a:	1f 91       	pop	r17
+ 29c:	0f 91       	pop	r16
+ 29e:	08 95       	ret
+
+000002a0 <USART_voidInit>:
+#define USART_u32_BAUD        9600UL
+#define USART_u16_UBRR_VALUE  ((F_CPU / (16UL * USART_u32_BAUD)) - 1)
+
+void USART_voidInit(void)
+{
+    UBRRH = (u8)(USART_u16_UBRR_VALUE >> 8);
+ 2a0:	10 bc       	out	0x20, r1	; 32
+    UBRRL = (u8)(USART_u16_UBRR_VALUE);
+ 2a2:	83 e3       	ldi	r24, 0x33	; 51
+ 2a4:	89 b9       	out	0x09, r24	; 9
+    UCSRB = (1 << TXEN) | (1 << RXEN);
+ 2a6:	88 e1       	ldi	r24, 0x18	; 24
+ 2a8:	8a b9       	out	0x0a, r24	; 10
+    UCSRC = (1 << URSEL) | (1 << UCSZ1) | (1 << UCSZ0); /* 8 data bits, 1 stop, no parity */
+ 2aa:	86 e8       	ldi	r24, 0x86	; 134
+ 2ac:	80 bd       	out	0x20, r24	; 32
+}
+ 2ae:	08 95       	ret
+
+000002b0 <USART_voidSendByte>:
+
+void USART_voidSendByte(u8 Copy_u8Data)
+{
+    while (!(UCSRA & (1 << UDRE)));
+ 2b0:	5d 9b       	sbis	0x0b, 5	; 11
+ 2b2:	fe cf       	rjmp	.-4      	; 0x2b0 <USART_voidSendByte>
+    UDR = Copy_u8Data;
+ 2b4:	8c b9       	out	0x0c, r24	; 12
+}
+ 2b6:	08 95       	ret
+
+000002b8 <USART_u8IsDataAvailable>:
+
+u8 USART_u8IsDataAvailable(void)
+{
+    return (UCSRA & (1 << RXC)) ? 1 : 0;
+ 2b8:	8b b1       	in	r24, 0x0b	; 11
+}
+ 2ba:	88 1f       	adc	r24, r24
+ 2bc:	88 27       	eor	r24, r24
+ 2be:	88 1f       	adc	r24, r24
+ 2c0:	08 95       	ret
+
+000002c2 <USART_u8ReceiveByte>:
+
+u8 USART_u8ReceiveByte(void)
+{
+    while (!(UCSRA & (1 << RXC)));
+ 2c2:	5f 9b       	sbis	0x0b, 7	; 11
+ 2c4:	fe cf       	rjmp	.-4      	; 0x2c2 <USART_u8ReceiveByte>
+    return UDR;
+ 2c6:	8c b1       	in	r24, 0x0c	; 12
+}
+ 2c8:	08 95       	ret
+
+000002ca <TIMER1_voidInit>:
+#include "TIMER1_interface.h"
+#include "TIMER1_private.h"
+
+void TIMER1_voidInit(void)
+{
+    TCCR1A = 0;
+ 2ca:	1f bc       	out	0x2f, r1	; 47
+    TCCR1B = (1 << CS11); /* Prescaler = 8 */
+ 2cc:	82 e0       	ldi	r24, 0x02	; 2
+ 2ce:	8e bd       	out	0x2e, r24	; 46
+}
+ 2d0:	08 95       	ret
+
+000002d2 <TIMER1_voidSetICUEdgeTrigger>:
+
+void TIMER1_voidSetICUEdgeTrigger(u8 Copy_u8Edge)
+{
+    if(Copy_u8Edge == TIMER1_ICU_RISING_EDGE)
+ 2d2:	81 30       	cpi	r24, 0x01	; 1
+ 2d4:	19 f4       	brne	.+6      	; 0x2dc <TIMER1_voidSetICUEdgeTrigger+0xa>
+        TCCR1B |= (1 << ICES1);
+ 2d6:	8e b5       	in	r24, 0x2e	; 46
+ 2d8:	80 64       	ori	r24, 0x40	; 64
+ 2da:	02 c0       	rjmp	.+4      	; 0x2e0 <TIMER1_voidSetICUEdgeTrigger+0xe>
+    else
+        TCCR1B &= ~(1 << ICES1);
+ 2dc:	8e b5       	in	r24, 0x2e	; 46
+ 2de:	8f 7b       	andi	r24, 0xBF	; 191
+ 2e0:	8e bd       	out	0x2e, r24	; 46
+ 2e2:	08 95       	ret
+
+000002e4 <TIMER1_voidClearICUFlag>:
+}
+
+void TIMER1_voidClearICUFlag(void)
+{
+    TIFR = (1 << ICF1);
+ 2e4:	80 e2       	ldi	r24, 0x20	; 32
+ 2e6:	88 bf       	out	0x38, r24	; 56
+}
+ 2e8:	08 95       	ret
+
+000002ea <TIMER1_u8GetICUFlag>:
+
+u8 TIMER1_u8GetICUFlag(void)
+{
+    return ((TIFR >> ICF1) & 0x01);
+ 2ea:	88 b7       	in	r24, 0x38	; 56
+ 2ec:	82 95       	swap	r24
+ 2ee:	86 95       	lsr	r24
+}
+ 2f0:	81 70       	andi	r24, 0x01	; 1
+ 2f2:	08 95       	ret
+
+000002f4 <TIMER1_u16GetICUValue>:
+
+u16 TIMER1_u16GetICUValue(void)
+{
+    return ICR1;
+ 2f4:	26 b5       	in	r18, 0x26	; 38
+ 2f6:	37 b5       	in	r19, 0x27	; 39
+}
+ 2f8:	c9 01       	movw	r24, r18
+ 2fa:	08 95       	ret
+
+000002fc <TIMER1_voidSetTimerValue>:
+
+void TIMER1_voidSetTimerValue(u16 Copy_u16Value)
+{
+    TCNT1 = Copy_u16Value;
+ 2fc:	9d bd       	out	0x2d, r25	; 45
+ 2fe:	8c bd       	out	0x2c, r24	; 44
+}
+ 300:	08 95       	ret
+
+00000302 <TIMER1_voidStop>:
+
+void TIMER1_voidStop(void)
+{
+    TCCR1B = 0;
+ 302:	1e bc       	out	0x2e, r1	; 46
+}
+ 304:	08 95       	ret
+
+00000306 <TIMER_voidTimer0Init>:
+
+void TIMER_voidTimer0Init(void)
+{
+    /* Phase Correct PWM mode (WGM01:WGM00 = 0,1), Clear OC0 on compare match up-counting (non-inverting),
+       prescaler = 8 (CS01 = 1) */
+    TCCR0 = (1 << WGM00) | (1 << COM01) | (1 << CS01);
+ 306:	82 e6       	ldi	r24, 0x62	; 98
+ 308:	83 bf       	out	0x33, r24	; 51
+    OCR0  = 0;
+ 30a:	1c be       	out	0x3c, r1	; 60
+}
+ 30c:	08 95       	ret
+
+0000030e <TIMER_voidTimer0SetCompareValue>:
+
+void TIMER_voidTimer0SetCompareValue(u8 Copy_u8Value)
+{
+    OCR0 = Copy_u8Value;
+ 30e:	8c bf       	out	0x3c, r24	; 60
+}
+ 310:	08 95       	ret
+
+00000312 <DIO_voidSetPinDirection>:
+#include "../00-LIB/BIT_MATH.h"
+#include "DIO_interface.h"
+
+void DIO_voidSetPinDirection(u8 Copy_u8Port, u8 Copy_u8Pin, u8 Copy_u8Direction)
+{
+    switch (Copy_u8Port)
+ 312:	81 30       	cpi	r24, 0x01	; 1
+ 314:	09 f1       	breq	.+66     	; 0x358 <DIO_voidSetPinDirection+0x46>
+ 316:	81 30       	cpi	r24, 0x01	; 1
+ 318:	30 f0       	brcs	.+12     	; 0x326 <DIO_voidSetPinDirection+0x14>
+ 31a:	82 30       	cpi	r24, 0x02	; 2
+ 31c:	b1 f1       	breq	.+108    	; 0x38a <DIO_voidSetPinDirection+0x78>
+ 31e:	83 30       	cpi	r24, 0x03	; 3
+ 320:	09 f0       	breq	.+2      	; 0x324 <DIO_voidSetPinDirection+0x12>
+ 322:	64 c0       	rjmp	.+200    	; 0x3ec <DIO_voidSetPinDirection+0xda>
+ 324:	4b c0       	rjmp	.+150    	; 0x3bc <DIO_voidSetPinDirection+0xaa>
+    {
+        case DIO_u8_PORTA:
+            if (Copy_u8Direction == DIO_u8_OUTPUT) SET_BIT(DDRA, Copy_u8Pin); else CLR_BIT(DDRA, Copy_u8Pin);
+ 326:	41 30       	cpi	r20, 0x01	; 1
+ 328:	59 f4       	brne	.+22     	; 0x340 <DIO_voidSetPinDirection+0x2e>
+ 32a:	2a b3       	in	r18, 0x1a	; 26
+ 32c:	81 e0       	ldi	r24, 0x01	; 1
+ 32e:	90 e0       	ldi	r25, 0x00	; 0
+ 330:	02 c0       	rjmp	.+4      	; 0x336 <DIO_voidSetPinDirection+0x24>
+ 332:	88 0f       	add	r24, r24
+ 334:	99 1f       	adc	r25, r25
+ 336:	6a 95       	dec	r22
+ 338:	e2 f7       	brpl	.-8      	; 0x332 <DIO_voidSetPinDirection+0x20>
+ 33a:	28 2b       	or	r18, r24
+ 33c:	2a bb       	out	0x1a, r18	; 26
+ 33e:	08 95       	ret
+ 340:	2a b3       	in	r18, 0x1a	; 26
+ 342:	81 e0       	ldi	r24, 0x01	; 1
+ 344:	90 e0       	ldi	r25, 0x00	; 0
+ 346:	02 c0       	rjmp	.+4      	; 0x34c <DIO_voidSetPinDirection+0x3a>
+ 348:	88 0f       	add	r24, r24
+ 34a:	99 1f       	adc	r25, r25
+ 34c:	6a 95       	dec	r22
+ 34e:	e2 f7       	brpl	.-8      	; 0x348 <DIO_voidSetPinDirection+0x36>
+ 350:	80 95       	com	r24
+ 352:	82 23       	and	r24, r18
+ 354:	8a bb       	out	0x1a, r24	; 26
+ 356:	08 95       	ret
+            break;
+        case DIO_u8_PORTB:
+            if (Copy_u8Direction == DIO_u8_OUTPUT) SET_BIT(DDRB, Copy_u8Pin); else CLR_BIT(DDRB, Copy_u8Pin);
+ 358:	41 30       	cpi	r20, 0x01	; 1
+ 35a:	59 f4       	brne	.+22     	; 0x372 <DIO_voidSetPinDirection+0x60>
+ 35c:	27 b3       	in	r18, 0x17	; 23
+ 35e:	81 e0       	ldi	r24, 0x01	; 1
+ 360:	90 e0       	ldi	r25, 0x00	; 0
+ 362:	02 c0       	rjmp	.+4      	; 0x368 <DIO_voidSetPinDirection+0x56>
+ 364:	88 0f       	add	r24, r24
+ 366:	99 1f       	adc	r25, r25
+ 368:	6a 95       	dec	r22
+ 36a:	e2 f7       	brpl	.-8      	; 0x364 <DIO_voidSetPinDirection+0x52>
+ 36c:	28 2b       	or	r18, r24
+ 36e:	27 bb       	out	0x17, r18	; 23
+ 370:	08 95       	ret
+ 372:	27 b3       	in	r18, 0x17	; 23
+ 374:	81 e0       	ldi	r24, 0x01	; 1
+ 376:	90 e0       	ldi	r25, 0x00	; 0
+ 378:	02 c0       	rjmp	.+4      	; 0x37e <DIO_voidSetPinDirection+0x6c>
+ 37a:	88 0f       	add	r24, r24
+ 37c:	99 1f       	adc	r25, r25
+ 37e:	6a 95       	dec	r22
+ 380:	e2 f7       	brpl	.-8      	; 0x37a <DIO_voidSetPinDirection+0x68>
+ 382:	80 95       	com	r24
+ 384:	82 23       	and	r24, r18
+ 386:	87 bb       	out	0x17, r24	; 23
+ 388:	08 95       	ret
+            break;
+        case DIO_u8_PORTC:
+            if (Copy_u8Direction == DIO_u8_OUTPUT) SET_BIT(DDRC, Copy_u8Pin); else CLR_BIT(DDRC, Copy_u8Pin);
+ 38a:	41 30       	cpi	r20, 0x01	; 1
+ 38c:	59 f4       	brne	.+22     	; 0x3a4 <DIO_voidSetPinDirection+0x92>
+ 38e:	24 b3       	in	r18, 0x14	; 20
+ 390:	81 e0       	ldi	r24, 0x01	; 1
+ 392:	90 e0       	ldi	r25, 0x00	; 0
+ 394:	02 c0       	rjmp	.+4      	; 0x39a <DIO_voidSetPinDirection+0x88>
+ 396:	88 0f       	add	r24, r24
+ 398:	99 1f       	adc	r25, r25
+ 39a:	6a 95       	dec	r22
+ 39c:	e2 f7       	brpl	.-8      	; 0x396 <DIO_voidSetPinDirection+0x84>
+ 39e:	28 2b       	or	r18, r24
+ 3a0:	24 bb       	out	0x14, r18	; 20
+ 3a2:	08 95       	ret
+ 3a4:	24 b3       	in	r18, 0x14	; 20
+ 3a6:	81 e0       	ldi	r24, 0x01	; 1
+ 3a8:	90 e0       	ldi	r25, 0x00	; 0
+ 3aa:	02 c0       	rjmp	.+4      	; 0x3b0 <DIO_voidSetPinDirection+0x9e>
+ 3ac:	88 0f       	add	r24, r24
+ 3ae:	99 1f       	adc	r25, r25
+ 3b0:	6a 95       	dec	r22
+ 3b2:	e2 f7       	brpl	.-8      	; 0x3ac <DIO_voidSetPinDirection+0x9a>
+ 3b4:	80 95       	com	r24
+ 3b6:	82 23       	and	r24, r18
+ 3b8:	84 bb       	out	0x14, r24	; 20
+ 3ba:	08 95       	ret
+            break;
+        case DIO_u8_PORTD:
+            if (Copy_u8Direction == DIO_u8_OUTPUT) SET_BIT(DDRD, Copy_u8Pin); else CLR_BIT(DDRD, Copy_u8Pin);
+ 3bc:	41 30       	cpi	r20, 0x01	; 1
+ 3be:	59 f4       	brne	.+22     	; 0x3d6 <DIO_voidSetPinDirection+0xc4>
+ 3c0:	21 b3       	in	r18, 0x11	; 17
+ 3c2:	81 e0       	ldi	r24, 0x01	; 1
+ 3c4:	90 e0       	ldi	r25, 0x00	; 0
+ 3c6:	02 c0       	rjmp	.+4      	; 0x3cc <DIO_voidSetPinDirection+0xba>
+ 3c8:	88 0f       	add	r24, r24
+ 3ca:	99 1f       	adc	r25, r25
+ 3cc:	6a 95       	dec	r22
+ 3ce:	e2 f7       	brpl	.-8      	; 0x3c8 <DIO_voidSetPinDirection+0xb6>
+ 3d0:	28 2b       	or	r18, r24
+ 3d2:	21 bb       	out	0x11, r18	; 17
+ 3d4:	08 95       	ret
+ 3d6:	21 b3       	in	r18, 0x11	; 17
+ 3d8:	81 e0       	ldi	r24, 0x01	; 1
+ 3da:	90 e0       	ldi	r25, 0x00	; 0
+ 3dc:	02 c0       	rjmp	.+4      	; 0x3e2 <DIO_voidSetPinDirection+0xd0>
+ 3de:	88 0f       	add	r24, r24
+ 3e0:	99 1f       	adc	r25, r25
+ 3e2:	6a 95       	dec	r22
+ 3e4:	e2 f7       	brpl	.-8      	; 0x3de <DIO_voidSetPinDirection+0xcc>
+ 3e6:	80 95       	com	r24
+ 3e8:	82 23       	and	r24, r18
+ 3ea:	81 bb       	out	0x11, r24	; 17
+ 3ec:	08 95       	ret
+
+000003ee <DIO_voidSetPinValue>:
+    }
+}
+
+void DIO_voidSetPinValue(u8 Copy_u8Port, u8 Copy_u8Pin, u8 Copy_u8Value)
+{
+    switch (Copy_u8Port)
+ 3ee:	81 30       	cpi	r24, 0x01	; 1
+ 3f0:	09 f1       	breq	.+66     	; 0x434 <DIO_voidSetPinValue+0x46>
+ 3f2:	81 30       	cpi	r24, 0x01	; 1
+ 3f4:	30 f0       	brcs	.+12     	; 0x402 <DIO_voidSetPinValue+0x14>
+ 3f6:	82 30       	cpi	r24, 0x02	; 2
+ 3f8:	b1 f1       	breq	.+108    	; 0x466 <DIO_voidSetPinValue+0x78>
+ 3fa:	83 30       	cpi	r24, 0x03	; 3
+ 3fc:	09 f0       	breq	.+2      	; 0x400 <DIO_voidSetPinValue+0x12>
+ 3fe:	64 c0       	rjmp	.+200    	; 0x4c8 <DIO_voidSetPinValue+0xda>
+ 400:	4b c0       	rjmp	.+150    	; 0x498 <DIO_voidSetPinValue+0xaa>
+    {
+        case DIO_u8_PORTA:
+            if (Copy_u8Value == DIO_u8_HIGH) SET_BIT(PORTA, Copy_u8Pin); else CLR_BIT(PORTA, Copy_u8Pin);
+ 402:	41 30       	cpi	r20, 0x01	; 1
+ 404:	59 f4       	brne	.+22     	; 0x41c <DIO_voidSetPinValue+0x2e>
+ 406:	2b b3       	in	r18, 0x1b	; 27
+ 408:	81 e0       	ldi	r24, 0x01	; 1
+ 40a:	90 e0       	ldi	r25, 0x00	; 0
+ 40c:	02 c0       	rjmp	.+4      	; 0x412 <DIO_voidSetPinValue+0x24>
+ 40e:	88 0f       	add	r24, r24
+ 410:	99 1f       	adc	r25, r25
+ 412:	6a 95       	dec	r22
+ 414:	e2 f7       	brpl	.-8      	; 0x40e <DIO_voidSetPinValue+0x20>
+ 416:	28 2b       	or	r18, r24
+ 418:	2b bb       	out	0x1b, r18	; 27
+ 41a:	08 95       	ret
+ 41c:	2b b3       	in	r18, 0x1b	; 27
+ 41e:	81 e0       	ldi	r24, 0x01	; 1
+ 420:	90 e0       	ldi	r25, 0x00	; 0
+ 422:	02 c0       	rjmp	.+4      	; 0x428 <DIO_voidSetPinValue+0x3a>
+ 424:	88 0f       	add	r24, r24
+ 426:	99 1f       	adc	r25, r25
+ 428:	6a 95       	dec	r22
+ 42a:	e2 f7       	brpl	.-8      	; 0x424 <DIO_voidSetPinValue+0x36>
+ 42c:	80 95       	com	r24
+ 42e:	82 23       	and	r24, r18
+ 430:	8b bb       	out	0x1b, r24	; 27
+ 432:	08 95       	ret
+            break;
+        case DIO_u8_PORTB:
+            if (Copy_u8Value == DIO_u8_HIGH) SET_BIT(PORTB, Copy_u8Pin); else CLR_BIT(PORTB, Copy_u8Pin);
+ 434:	41 30       	cpi	r20, 0x01	; 1
+ 436:	59 f4       	brne	.+22     	; 0x44e <DIO_voidSetPinValue+0x60>
+ 438:	28 b3       	in	r18, 0x18	; 24
+ 43a:	81 e0       	ldi	r24, 0x01	; 1
+ 43c:	90 e0       	ldi	r25, 0x00	; 0
+ 43e:	02 c0       	rjmp	.+4      	; 0x444 <DIO_voidSetPinValue+0x56>
+ 440:	88 0f       	add	r24, r24
+ 442:	99 1f       	adc	r25, r25
+ 444:	6a 95       	dec	r22
+ 446:	e2 f7       	brpl	.-8      	; 0x440 <DIO_voidSetPinValue+0x52>
+ 448:	28 2b       	or	r18, r24
+ 44a:	28 bb       	out	0x18, r18	; 24
+ 44c:	08 95       	ret
+ 44e:	28 b3       	in	r18, 0x18	; 24
+ 450:	81 e0       	ldi	r24, 0x01	; 1
+ 452:	90 e0       	ldi	r25, 0x00	; 0
+ 454:	02 c0       	rjmp	.+4      	; 0x45a <DIO_voidSetPinValue+0x6c>
+ 456:	88 0f       	add	r24, r24
+ 458:	99 1f       	adc	r25, r25
+ 45a:	6a 95       	dec	r22
+ 45c:	e2 f7       	brpl	.-8      	; 0x456 <DIO_voidSetPinValue+0x68>
+ 45e:	80 95       	com	r24
+ 460:	82 23       	and	r24, r18
+ 462:	88 bb       	out	0x18, r24	; 24
+ 464:	08 95       	ret
+            break;
+        case DIO_u8_PORTC:
+            if (Copy_u8Value == DIO_u8_HIGH) SET_BIT(PORTC, Copy_u8Pin); else CLR_BIT(PORTC, Copy_u8Pin);
+ 466:	41 30       	cpi	r20, 0x01	; 1
+ 468:	59 f4       	brne	.+22     	; 0x480 <DIO_voidSetPinValue+0x92>
+ 46a:	25 b3       	in	r18, 0x15	; 21
+ 46c:	81 e0       	ldi	r24, 0x01	; 1
+ 46e:	90 e0       	ldi	r25, 0x00	; 0
+ 470:	02 c0       	rjmp	.+4      	; 0x476 <DIO_voidSetPinValue+0x88>
+ 472:	88 0f       	add	r24, r24
+ 474:	99 1f       	adc	r25, r25
+ 476:	6a 95       	dec	r22
+ 478:	e2 f7       	brpl	.-8      	; 0x472 <DIO_voidSetPinValue+0x84>
+ 47a:	28 2b       	or	r18, r24
+ 47c:	25 bb       	out	0x15, r18	; 21
+ 47e:	08 95       	ret
+ 480:	25 b3       	in	r18, 0x15	; 21
+ 482:	81 e0       	ldi	r24, 0x01	; 1
+ 484:	90 e0       	ldi	r25, 0x00	; 0
+ 486:	02 c0       	rjmp	.+4      	; 0x48c <DIO_voidSetPinValue+0x9e>
+ 488:	88 0f       	add	r24, r24
+ 48a:	99 1f       	adc	r25, r25
+ 48c:	6a 95       	dec	r22
+ 48e:	e2 f7       	brpl	.-8      	; 0x488 <DIO_voidSetPinValue+0x9a>
+ 490:	80 95       	com	r24
+ 492:	82 23       	and	r24, r18
+ 494:	85 bb       	out	0x15, r24	; 21
+ 496:	08 95       	ret
+            break;
+        case DIO_u8_PORTD:
+            if (Copy_u8Value == DIO_u8_HIGH) SET_BIT(PORTD, Copy_u8Pin); else CLR_BIT(PORTD, Copy_u8Pin);
+ 498:	41 30       	cpi	r20, 0x01	; 1
+ 49a:	59 f4       	brne	.+22     	; 0x4b2 <DIO_voidSetPinValue+0xc4>
+ 49c:	22 b3       	in	r18, 0x12	; 18
+ 49e:	81 e0       	ldi	r24, 0x01	; 1
+ 4a0:	90 e0       	ldi	r25, 0x00	; 0
+ 4a2:	02 c0       	rjmp	.+4      	; 0x4a8 <DIO_voidSetPinValue+0xba>
+ 4a4:	88 0f       	add	r24, r24
+ 4a6:	99 1f       	adc	r25, r25
+ 4a8:	6a 95       	dec	r22
+ 4aa:	e2 f7       	brpl	.-8      	; 0x4a4 <DIO_voidSetPinValue+0xb6>
+ 4ac:	28 2b       	or	r18, r24
+ 4ae:	22 bb       	out	0x12, r18	; 18
+ 4b0:	08 95       	ret
+ 4b2:	22 b3       	in	r18, 0x12	; 18
+ 4b4:	81 e0       	ldi	r24, 0x01	; 1
+ 4b6:	90 e0       	ldi	r25, 0x00	; 0
+ 4b8:	02 c0       	rjmp	.+4      	; 0x4be <DIO_voidSetPinValue+0xd0>
+ 4ba:	88 0f       	add	r24, r24
+ 4bc:	99 1f       	adc	r25, r25
+ 4be:	6a 95       	dec	r22
+ 4c0:	e2 f7       	brpl	.-8      	; 0x4ba <DIO_voidSetPinValue+0xcc>
+ 4c2:	80 95       	com	r24
+ 4c4:	82 23       	and	r24, r18
+ 4c6:	82 bb       	out	0x12, r24	; 18
+ 4c8:	08 95       	ret
+
+000004ca <DIO_voidGetPinValue>:
+}
+
+u8 DIO_voidGetPinValue(u8 Copy_u8Port, u8 Copy_u8Pin)
+{
+    u8 Local_u8Value = 0;
+    switch (Copy_u8Port)
+ 4ca:	81 30       	cpi	r24, 0x01	; 1
+ 4cc:	51 f0       	breq	.+20     	; 0x4e2 <DIO_voidGetPinValue+0x18>
+ 4ce:	81 30       	cpi	r24, 0x01	; 1
+ 4d0:	30 f0       	brcs	.+12     	; 0x4de <DIO_voidGetPinValue+0x14>
+ 4d2:	82 30       	cpi	r24, 0x02	; 2
+ 4d4:	41 f0       	breq	.+16     	; 0x4e6 <DIO_voidGetPinValue+0x1c>
+ 4d6:	83 30       	cpi	r24, 0x03	; 3
+ 4d8:	79 f0       	breq	.+30     	; 0x4f8 <DIO_voidGetPinValue+0x2e>
+ 4da:	80 e0       	ldi	r24, 0x00	; 0
+ 4dc:	08 95       	ret
+    {
+        case DIO_u8_PORTA: Local_u8Value = GET_BIT(PINA, Copy_u8Pin); break;
+ 4de:	89 b3       	in	r24, 0x19	; 25
+ 4e0:	03 c0       	rjmp	.+6      	; 0x4e8 <DIO_voidGetPinValue+0x1e>
+        case DIO_u8_PORTB: Local_u8Value = GET_BIT(PINB, Copy_u8Pin); break;
+ 4e2:	86 b3       	in	r24, 0x16	; 22
+ 4e4:	01 c0       	rjmp	.+2      	; 0x4e8 <DIO_voidGetPinValue+0x1e>
+        case DIO_u8_PORTC: Local_u8Value = GET_BIT(PINC, Copy_u8Pin); break;
+ 4e6:	83 b3       	in	r24, 0x13	; 19
+ 4e8:	90 e0       	ldi	r25, 0x00	; 0
+ 4ea:	02 c0       	rjmp	.+4      	; 0x4f0 <DIO_voidGetPinValue+0x26>
+ 4ec:	95 95       	asr	r25
+ 4ee:	87 95       	ror	r24
+ 4f0:	6a 95       	dec	r22
+ 4f2:	e2 f7       	brpl	.-8      	; 0x4ec <DIO_voidGetPinValue+0x22>
+ 4f4:	81 70       	andi	r24, 0x01	; 1
+ 4f6:	08 95       	ret
+        case DIO_u8_PORTD: Local_u8Value = GET_BIT(PIND, Copy_u8Pin); break;
+ 4f8:	80 b3       	in	r24, 0x10	; 16
+ 4fa:	90 e0       	ldi	r25, 0x00	; 0
+ 4fc:	02 c0       	rjmp	.+4      	; 0x502 <DIO_voidGetPinValue+0x38>
+ 4fe:	95 95       	asr	r25
+ 500:	87 95       	ror	r24
+ 502:	6a 95       	dec	r22
+ 504:	e2 f7       	brpl	.-8      	; 0x4fe <DIO_voidGetPinValue+0x34>
+ 506:	81 70       	andi	r24, 0x01	; 1
+    }
+    return Local_u8Value;
+}
+ 508:	08 95       	ret
+
+0000050a <DIO_voidSetPortDirection>:
+
+void DIO_voidSetPortDirection(u8 Copy_u8Port, u8 Copy_u8Direction)
+{
+    switch (Copy_u8Port)
+ 50a:	81 30       	cpi	r24, 0x01	; 1
+ 50c:	49 f0       	breq	.+18     	; 0x520 <DIO_voidSetPortDirection+0x16>
+ 50e:	81 30       	cpi	r24, 0x01	; 1
+ 510:	28 f0       	brcs	.+10     	; 0x51c <DIO_voidSetPortDirection+0x12>
+ 512:	82 30       	cpi	r24, 0x02	; 2
+ 514:	39 f0       	breq	.+14     	; 0x524 <DIO_voidSetPortDirection+0x1a>
+ 516:	83 30       	cpi	r24, 0x03	; 3
+ 518:	41 f4       	brne	.+16     	; 0x52a <DIO_voidSetPortDirection+0x20>
+ 51a:	06 c0       	rjmp	.+12     	; 0x528 <DIO_voidSetPortDirection+0x1e>
+    {
+        case DIO_u8_PORTA: DDRA = Copy_u8Direction; break;
+ 51c:	6a bb       	out	0x1a, r22	; 26
+ 51e:	08 95       	ret
+        case DIO_u8_PORTB: DDRB = Copy_u8Direction; break;
+ 520:	67 bb       	out	0x17, r22	; 23
+ 522:	08 95       	ret
+        case DIO_u8_PORTC: DDRC = Copy_u8Direction; break;
+ 524:	64 bb       	out	0x14, r22	; 20
+ 526:	08 95       	ret
+        case DIO_u8_PORTD: DDRD = Copy_u8Direction; break;
+ 528:	61 bb       	out	0x11, r22	; 17
+ 52a:	08 95       	ret
+
+0000052c <DIO_voidSetPortValue>:
+    }
+}
+
+void DIO_voidSetPortValue(u8 Copy_u8Port, u8 Copy_u8Value)
+{
+    switch (Copy_u8Port)
+ 52c:	81 30       	cpi	r24, 0x01	; 1
+ 52e:	49 f0       	breq	.+18     	; 0x542 <DIO_voidSetPortValue+0x16>
+ 530:	81 30       	cpi	r24, 0x01	; 1
+ 532:	28 f0       	brcs	.+10     	; 0x53e <DIO_voidSetPortValue+0x12>
+ 534:	82 30       	cpi	r24, 0x02	; 2
+ 536:	39 f0       	breq	.+14     	; 0x546 <DIO_voidSetPortValue+0x1a>
+ 538:	83 30       	cpi	r24, 0x03	; 3
+ 53a:	41 f4       	brne	.+16     	; 0x54c <DIO_voidSetPortValue+0x20>
+ 53c:	06 c0       	rjmp	.+12     	; 0x54a <DIO_voidSetPortValue+0x1e>
+    {
+        case DIO_u8_PORTA: PORTA = Copy_u8Value; break;
+ 53e:	6b bb       	out	0x1b, r22	; 27
+ 540:	08 95       	ret
+        case DIO_u8_PORTB: PORTB = Copy_u8Value; break;
+ 542:	68 bb       	out	0x18, r22	; 24
+ 544:	08 95       	ret
+        case DIO_u8_PORTC: PORTC = Copy_u8Value; break;
+ 546:	65 bb       	out	0x15, r22	; 21
+ 548:	08 95       	ret
+        case DIO_u8_PORTD: PORTD = Copy_u8Value; break;
+ 54a:	62 bb       	out	0x12, r22	; 18
+ 54c:	08 95       	ret
+
+0000054e <__udivmodhi4>:
+ 54e:	aa 1b       	sub	r26, r26
+ 550:	bb 1b       	sub	r27, r27
+ 552:	51 e1       	ldi	r21, 0x11	; 17
+ 554:	07 c0       	rjmp	.+14     	; 0x564 <__udivmodhi4_ep>
+
+00000556 <__udivmodhi4_loop>:
+ 556:	aa 1f       	adc	r26, r26
+ 558:	bb 1f       	adc	r27, r27
+ 55a:	a6 17       	cp	r26, r22
+ 55c:	b7 07       	cpc	r27, r23
+ 55e:	10 f0       	brcs	.+4      	; 0x564 <__udivmodhi4_ep>
+ 560:	a6 1b       	sub	r26, r22
+ 562:	b7 0b       	sbc	r27, r23
+
+00000564 <__udivmodhi4_ep>:
+ 564:	88 1f       	adc	r24, r24
+ 566:	99 1f       	adc	r25, r25
+ 568:	5a 95       	dec	r21
+ 56a:	a9 f7       	brne	.-22     	; 0x556 <__udivmodhi4_loop>
+ 56c:	80 95       	com	r24
+ 56e:	90 95       	com	r25
+ 570:	bc 01       	movw	r22, r24
+ 572:	cd 01       	movw	r24, r26
+ 574:	08 95       	ret
+
+00000576 <_exit>:
+ 576:	f8 94       	cli
+
+00000578 <__stop_program>:
+ 578:	ff cf       	rjmp	.-2      	; 0x578 <__stop_program>
