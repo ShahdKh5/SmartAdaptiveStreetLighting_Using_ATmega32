@@ -21,25 +21,19 @@ void LCD_voidInit(void)
 
     DIO_voidSetPortDirection(LCD_u8_DATA_PORT, 0xFF);
 
-    /* Initial state */
     DIO_voidSetPinValue(LCD_u8_CTRL_PORT, LCD_u8_RSPIN, DIO_u8_LOW);
     DIO_voidSetPinValue(LCD_u8_CTRL_PORT, LCD_u8_RWPIN, DIO_u8_LOW);
     DIO_voidSetPinValue(LCD_u8_CTRL_PORT, LCD_u8_EPIN, DIO_u8_LOW);
 
-    /* LCD power-up delay */
     _delay_ms(30);
 
-    /* 8-bit mode, 2 lines, 5x8 font */
-    LCD_voidSendInstruction(0x38);
+    LCD_voidSendInstruction(LCD_u8_CMD_FUNCTION_SET);
 
-    /* Display ON, Cursor OFF, Blink OFF */
-    LCD_voidSendInstruction(0x0C);
+    LCD_voidSendInstruction(LCD_u8_CMD_DISPLAY_ON);
 
-    /* Clear display */
-    LCD_voidSendInstruction(0x01);
+    LCD_voidSendInstruction(LCD_u8_CMD_CLEAR_DISPLAY);
 
-    /* Increment cursor */
-    LCD_voidSendInstruction(0x06);
+    LCD_voidSendInstruction(LCD_u8_CMD_ENTRY_MODE);
 
     _delay_ms(2);
 }
@@ -156,19 +150,18 @@ void LCD_voidGotoXY(u8 Copy_u8Row, u8 Copy_u8Column)
 {
     if ((Copy_u8Row == 1) && (Copy_u8Column < 16))
     {
-        LCD_voidSendInstruction(0x80 + Copy_u8Column);
+        LCD_voidSendInstruction(LCD_u8_ROW1_BASE_ADDR + Copy_u8Column);
     }
     else if ((Copy_u8Row == 2) && (Copy_u8Column < 16))
     {
-        LCD_voidSendInstruction(0xC0 + Copy_u8Column);
+        LCD_voidSendInstruction(LCD_u8_ROW2_BASE_ADDR + Copy_u8Column);
     }
 }
 
 
 void LCD_voidClearDisplay(void)
 {
-    LCD_voidSendInstruction(0x01);
-
+    LCD_voidSendInstruction(LCD_u8_CMD_CLEAR_DISPLAY);
     _delay_ms(2);
 }
 
@@ -180,13 +173,13 @@ void LCD_voidWriteSpecialChar(
     u8 Copy_u8Column
 )
 {
-    u8 Local_u8Adress = Copy_u8PatternNumber * 8;
+    u8 Local_u8Adress = Copy_u8PatternNumber * LCD_u8_PATTERN_SIZE;
 
     /* Set CGRAM address */
-    LCD_voidSendInstruction(Local_u8Adress + 0x40);
+    LCD_voidSendInstruction(Local_u8Adress + LCD_u8_CGRAM_BASE_ADDR);
 
     /* Write pattern */
-    for (u8 i = 0; i < 8; i++)
+    for (u8 i = 0; i < LCD_u8_PATTERN_SIZE; i++)
     {
         LCD_voidWriteChar(Copy_u8Pattern[i]);
     }
