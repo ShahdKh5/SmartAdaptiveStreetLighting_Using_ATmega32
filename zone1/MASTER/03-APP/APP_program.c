@@ -177,29 +177,6 @@ void APP_voidControlLighting(void)
     }
 }
 
-/*
-static u8 APP_u8EnergySavingPercent(void)
-{
-    u16 Local_u16Total = 0;
-    u8  Local_u8Levels[3];
-    u8  i;
-    Local_u8Levels[0] = APP_u8Zone1Level;
-    Local_u8Levels[1] = APP_u8Zone2Level;
-    Local_u8Levels[2] = APP_u8Zone3Level;
-
-    for (i = 0; i < 3; i++)
-    {
-        switch (Local_u8Levels[i])
-        {
-            case LED_u8_LEVEL_OFF:  Local_u16Total += 0;  break;
-            case LED_u8_LEVEL_LOW:  Local_u16Total += 25; break;
-            case LED_u8_LEVEL_HIGH: Local_u16Total += 90; break;
-        }
-    }
-    return (u8)(100 - (Local_u16Total / 3));
-}
-*/
-
 static u8 APP_u8ZoneLevelChar(u8 Copy_u8Level)
 {
     switch (Copy_u8Level)
