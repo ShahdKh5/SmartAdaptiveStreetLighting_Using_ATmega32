@@ -40,84 +40,38 @@ void LCD_voidInit(void)
 void LCD_voidSendInstruction(u8 Copy_u8instruction)
 {
 
-    DIO_voidSetPinValue(
-        LCD_u8_CTRL_PORT,
-        LCD_u8_RSPIN,
-        DIO_u8_LOW
-    );
+    DIO_voidSetPinValue(LCD_u8_CTRL_PORT, LCD_u8_RSPIN, DIO_u8_LOW);
 
-    DIO_voidSetPinValue(
-        LCD_u8_CTRL_PORT,
-        LCD_u8_RWPIN,
-        DIO_u8_LOW
-    );
+    DIO_voidSetPinValue(LCD_u8_CTRL_PORT, LCD_u8_RWPIN, DIO_u8_LOW);
 
-    DIO_voidSetPinValue(
-        LCD_u8_CTRL_PORT,
-        LCD_u8_EPIN,
-        DIO_u8_LOW
-    );
+    DIO_voidSetPinValue(LCD_u8_CTRL_PORT, LCD_u8_EPIN, DIO_u8_LOW);
 
-    DIO_voidSetPortValue(
-        LCD_u8_DATA_PORT,
-        Copy_u8instruction
-    );
+    DIO_voidSetPortValue( LCD_u8_DATA_PORT,Copy_u8instruction);
 
-    DIO_voidSetPinValue(
-        LCD_u8_CTRL_PORT,
-        LCD_u8_EPIN,
-        DIO_u8_HIGH
-    );
+    DIO_voidSetPinValue(LCD_u8_CTRL_PORT, LCD_u8_EPIN, DIO_u8_HIGH);
 
     _delay_us(10);
 
-    DIO_voidSetPinValue(
-        LCD_u8_CTRL_PORT,
-        LCD_u8_EPIN,
-        DIO_u8_LOW
-    );
+    DIO_voidSetPinValue(LCD_u8_CTRL_PORT, LCD_u8_EPIN, DIO_u8_LOW);
 
 
     _delay_ms(2);
 }
 void LCD_voidWriteChar(u8 Copy_u8Data)
 {
-    DIO_voidSetPinValue(
-        LCD_u8_CTRL_PORT,
-        LCD_u8_RSPIN,
-        DIO_u8_HIGH
-    );
+    DIO_voidSetPinValue(LCD_u8_CTRL_PORT, LCD_u8_RSPIN, DIO_u8_HIGH);
 
-    DIO_voidSetPinValue(
-        LCD_u8_CTRL_PORT,
-        LCD_u8_RWPIN,
-        DIO_u8_LOW
-    );
+    DIO_voidSetPinValue(LCD_u8_CTRL_PORT, LCD_u8_RWPIN,DIO_u8_LOW);
 
-    DIO_voidSetPinValue(
-        LCD_u8_CTRL_PORT,
-        LCD_u8_EPIN,
-        DIO_u8_LOW
-    );
+    DIO_voidSetPinValue(LCD_u8_CTRL_PORT, LCD_u8_EPIN, DIO_u8_LOW);
 
-    DIO_voidSetPortValue(
-        LCD_u8_DATA_PORT,
-        Copy_u8Data
-    );
+    DIO_voidSetPortValue(LCD_u8_DATA_PORT, Copy_u8Data);
     
-    DIO_voidSetPinValue(
-        LCD_u8_CTRL_PORT,
-        LCD_u8_EPIN,
-        DIO_u8_HIGH
-    );
+    DIO_voidSetPinValue(LCD_u8_CTRL_PORT, LCD_u8_EPIN, DIO_u8_HIGH);
 
     _delay_us(10);
 
-    DIO_voidSetPinValue(
-        LCD_u8_CTRL_PORT,
-        LCD_u8_EPIN,
-        DIO_u8_LOW
-    );
+    DIO_voidSetPinValue(LCD_u8_CTRL_PORT, LCD_u8_EPIN, DIO_u8_LOW);
 
     _delay_us(50);
 }
@@ -154,16 +108,10 @@ void LCD_voidGotoXY(u8 Copy_u8Row, u8 Copy_u8Column)
 void LCD_voidClearDisplay(void)
 {
     LCD_voidSendInstruction(LCD_u8_CMD_CLEAR_DISPLAY);
-    _delay_ms(2);
 }
 
 
-void LCD_voidWriteSpecialChar(
-    u8 *Copy_u8Pattern,
-    u8 Copy_u8PatternNumber,
-    u8 Copy_u8Row,
-    u8 Copy_u8Column
-)
+void LCD_voidWriteSpecialChar(u8 *Copy_u8Pattern, u8 Copy_u8PatternNumber, u8 Copy_u8Row, u8 Copy_u8Column)
 {
     u8 Local_u8Adress = Copy_u8PatternNumber * LCD_u8_PATTERN_SIZE;
 
@@ -174,9 +122,7 @@ void LCD_voidWriteSpecialChar(
         LCD_voidWriteChar(Copy_u8Pattern[i]);
     }
 
-    /* Return to DDRAM */
     LCD_voidGotoXY(Copy_u8Row, Copy_u8Column);
 
-    /* Display custom character */
     LCD_voidWriteChar(Copy_u8PatternNumber);
 }
