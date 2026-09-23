@@ -11,9 +11,6 @@ void BUTTON_voidInit(const BUTTON_Config_t *Copy_pstrButtonConfig)
 {
     DIO_voidSetPinDirection(Copy_pstrButtonConfig->Port, Copy_pstrButtonConfig->Pin, DIO_u8_INPUT);
 
-    /* On the ATmega32, writing PORTx HIGH while DDRx is INPUT enables that
-       pin's internal pull-up resistor — use this for BUTTON_PULL_UP wiring
-       (button to GND). For BUTTON_PULL_DOWN wiring, leave it as-is. */
     if (Copy_pstrButtonConfig->PullType == BUTTON_PULL_UP)
     {
         DIO_voidSetPinValue(Copy_pstrButtonConfig->Port, Copy_pstrButtonConfig->Pin, DIO_u8_HIGH);
@@ -28,11 +25,11 @@ u8 BUTTON_u8GetState(const BUTTON_Config_t *Copy_pstrButtonConfig)
     u8 Local_u8State = BUTTON_RELEASED;
 
     Local_u8FirstRead = DIO_voidGetPinValue(Copy_pstrButtonConfig->Port, Copy_pstrButtonConfig->Pin);
-    if (Local_u8FirstRead == Local_u8ActiveLevel)
+    if (Local_u8FirstRead == Local_u8ActiveLevel) // there is bounce or press
     {
-        _delay_ms(20); /* debounce */
+        _delay_ms(20); // debounce 
         Local_u8SecondRead = DIO_voidGetPinValue(Copy_pstrButtonConfig->Port, Copy_pstrButtonConfig->Pin);
-        if (Local_u8SecondRead == Local_u8ActiveLevel)
+        if (Local_u8SecondRead == Local_u8ActiveLevel) //real press
         {
             Local_u8State = BUTTON_PRESSED;
         }
