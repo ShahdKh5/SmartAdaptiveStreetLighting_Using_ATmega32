@@ -123,11 +123,13 @@ void LCD_voidWriteChar(u8 Copy_u8Data)
 }
 
 
-void LCD_voidWriteString(u8 *Copy_u8String, u8 Copy_u8Size)
+void LCD_voidWriteString(u8 *Copy_u8String)
 {
-    for (u8 i = 0; i < Copy_u8Size; i++)
+    u8 i = 0;
+    while (Copy_u8String[i] != '\0')
     {
         LCD_voidWriteChar(Copy_u8String[i]);
+        i++;
     }
 }
 
