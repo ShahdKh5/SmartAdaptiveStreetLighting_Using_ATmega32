@@ -3,22 +3,19 @@
 #include "../../01-MCAL/02-ADC/ADC_interface.h"
 #include "LDR_interface.h"
 
-void LDR_voidInit(void) {
-    /* TODO: 
-       1. Set the direction of the ADC channel pin connected to LDR as INPUT.
-    */
-    //LDR -> PA0
+#define LDR_u8_PORT  			DIO_u8_PORTA
+#define LDR_u8_PIN   			DIO_u8_PIN0
+#define LDR_u8_ADC_CHANNEL      ADC_CHANNEL_0
+
+#define LDR_u16_NIGHT_THRESHOLD 		500
+
+void LDR_voidInit(void)
+{
     DIO_voidSetPinDirection(LDR_u8_PORT, LDR_u8_PIN, DIO_u8_INPUT);
 }
 
-u8 LDR_u8IsNight(void) {
-    /* TODO: 
-       1. Read ADC value for the LDR channel using ADC_u16ReadSynchronus.
-       2. Compare the result with a threshold (e.g., if reading > 512, it's night).
-       3. Return 1 if night, 0 if day.
-    */
-    u16 LDR_u16Reading= ADC_u16ReadSynchronus(ADC_CHANNEL_0);
-    if (LDR_u16Reading > NIGHT_THRESHOLD)
-        return 1;   //Night
-    return 0;       //Day
+u8 LDR_u8IsNight(void)
+{
+    u16 Local_u16Reading = ADC_u16ReadSynchronus(LDR_u8_ADC_CHANNEL);
+    return (Local_u16Reading > LDR_u16_NIGHT_THRESHOLD) ? LDR_u8_NIGHT : LDR_u8_DAY;
 }
