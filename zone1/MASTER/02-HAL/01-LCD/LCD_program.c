@@ -144,6 +144,10 @@ void LCD_voidGotoXY(u8 Copy_u8Row, u8 Copy_u8Column)
     {
         LCD_voidSendInstruction(LCD_u8_ROW2_BASE_ADDR + Copy_u8Column);
     }
+    else
+    {
+
+    }
 }
 
 
@@ -163,10 +167,8 @@ void LCD_voidWriteSpecialChar(
 {
     u8 Local_u8Adress = Copy_u8PatternNumber * LCD_u8_PATTERN_SIZE;
 
-    /* Set CGRAM address */
     LCD_voidSendInstruction(Local_u8Adress + LCD_u8_CGRAM_BASE_ADDR);
 
-    /* Write pattern */
     for (u8 i = 0; i < LCD_u8_PATTERN_SIZE; i++)
     {
         LCD_voidWriteChar(Copy_u8Pattern[i]);
