@@ -3,24 +3,27 @@
 #include "../../01-MCAL/03-TIMER/TIMER_interface.h"
 #include "LED_interface.h"
 
-void LED_voidInit(void) {
-    /* TODO: 
-       1. Set the direction of the PWM pins (e.g., OC0 and OC1A) connected to the LED drivers as OUTPUT.
-    */
+#define LED_u8_OC0_PORT   DIO_u8_PORTB
+#define LED_u8_OC0_PIN    DIO_u8_PIN3
+
+#define LED_u8_DUTY_OFF   0
+#define LED_u8_DUTY_LOW   64    /* ~25% of 255 */
+#define LED_u8_DUTY_HIGH  230   /* ~90% of 255 */
+
+void LED_voidInit(void)
+{
+    DIO_voidSetPinDirection(LED_u8_OC0_PORT, LED_u8_OC0_PIN, DIO_u8_OUTPUT);
+    TIMER_voidTimer0Init();
 }
 
-void LED_voidSetZoneA_Brightness(u8 Copy_u8Level) {
-    /* TODO: 
-       1. Use TIMER_voidTimer0SetCompareValue to control the PWM duty cycle for Zone A.
-       2. Example: 
-          if Copy_u8Level == 0 -> Set compare value to 0 (OFF)
-          if Copy_u8Level == 1 -> Set compare value to ~64 (25% LOW)
-          if Copy_u8Level == 2 -> Set compare value to ~230 (90% HIGH)
-    */
-}
-
-void LED_voidSetZoneB_Brightness(u8 Copy_u8Level) {
-    /* TODO: 
-       1. Use TIMER_voidTimer1ASetCompareValue (or equivalent PWM function) to control the PWM duty cycle for Zone B.
-    */
+void LED_voidSetLevel(u8 Copy_u8Level)
+{
+    u8 Local_u8Duty;
+    switch (Copy_u8Level)
+    {
+        case LED_u8_LEVEL_LOW:  Local_u8Duty = LED_u8_DUTY_LOW;  break;
+        case LED_u8_LEVEL_HIGH: Local_u8Duty = LED_u8_DUTY_HIGH; break;
+        default:                Local_u8Duty = LED_u8_DUTY_OFF;  break;
+    }
+    TIMER_voidTimer0SetCompareValue(Local_u8Duty);
 }
