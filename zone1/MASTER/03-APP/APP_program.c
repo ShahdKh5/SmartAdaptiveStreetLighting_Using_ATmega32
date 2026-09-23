@@ -66,9 +66,9 @@ void APP_voidSystemInit(void)
 
     LCD_voidClearDisplay();
     LCD_voidGotoXY(1, 0);
-    LCD_voidWriteString((u8*)"SMART STREET", 12);
+    LCD_voidWriteString((u8*)"SMART STREET");
     LCD_voidGotoXY(2, 0);
-    LCD_voidWriteString((u8*)"LIGHT (3-MCU)", 13);
+    LCD_voidWriteString((u8*)"LIGHT (3-MCU)");
     _delay_ms(1000);
 }
 
@@ -118,17 +118,17 @@ void APP_voidControlLighting(void)
     }
     else
     {
-        /* قراءة المسافة */
+      
         Local_u16Distance = ULTRASONIC_u16GetDistance(&APP_strZone1Ultrasonic);
 
         if (Local_u16Distance != 0 && Local_u16Distance < APP_u16_DETECT_RANGE_CM)
         {
             APP_u8Zone1Level = LED_u8_LEVEL_HIGH;
-            APP_u8Zone1Hold = APP_u8_HOLD_LOOPS; /* شحن عداد الـ 3 ثواني */
+            APP_u8Zone1Hold = APP_u8_HOLD_LOOPS;
         }
         else
         {
-            /* تشغيل التأخير */
+            
             if (APP_u8Zone1Hold > 0)
             {
                 APP_u8Zone1Level = LED_u8_LEVEL_HIGH;
@@ -224,11 +224,11 @@ void APP_voidUpdateDisplay(void)
     }
     else if (APP_u8Zone1Level==LED_u8_LEVEL_OFF && APP_u8Zone2Level==LED_u8_LEVEL_OFF && APP_u8Zone3Level==LED_u8_LEVEL_OFF)
     {
-        LCD_voidWriteString((u8*)"DAY    AUTO", 11);
+        LCD_voidWriteString((u8*)"DAY    AUTO");
     }
     else
     {
-        LCD_voidWriteString((u8*)"NIGHT  AUTO", 11);
+        LCD_voidWriteString((u8*)"NIGHT  AUTO");
     }
 
     LCD_voidGotoXY(2, 0);
