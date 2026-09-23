@@ -1,71 +1,104 @@
+#ifndef F_CPU
+#define F_CPU 8000000UL
+#endif
+
+#include <util/delay.h>
 #include "../../01-MCAL/00-LIB/STD_TYPES.h"
 #include "../../01-MCAL/01-DIO/DIO_interface.h"
+#include "../../01-MCAL/03-TIMER/TIMER1_interface.h"
 #include "ULTRASONIC_interface.h"
-#include <util/delay.h>
 
-//Simple polling-based measurement.
-//Timeout protects the loop if no echo ever returns.
-#define ULTRASONIC_u32_TIMEOUT_US   30000UL
+/* Simple polling-based measurement (no ICU/interrupt needed): trigger the
+   sensor, wait for its own Echo to rise, then time how long it stays HIGH
+   in 1us steps. Timeout protects the loop if no echo ever returns. */
+#define ULTRASONIC_u32_TIMEOUT_US   30000UL   /* ~5 m round trip */
 
-void ULTRASONIC_voidInit(const ULTRASONIC_Config_t *Copy_pstrConfig) {
-    /* TODO: 
-       1. Configure Trigger pin as OUTPUT.
-       2. Configure Echo pin as INPUT.
-       For multiple sensors
-    */
-	if (Copy_pstrConfig == NULL) return; // Guard against NULL pointer dereference
-
-	DIO_voidSetPinDirection(Copy_pstrConfig->Trigger_u8_Port, Copy_pstrConfig->Trigger_u8_Pin, DIO_u8_OUTPUT);
-	DIO_voidSetPinDirection(Copy_pstrConfig->Echo_u8_Port, Copy_pstrConfig->Echo_u8_Pin, DIO_u8_INPUT);
-
-	// Ensure trigger pin starts LOW
-	DIO_voidSetPinValue(Copy_pstrConfig->Trigger_u8_Port, Copy_pstrConfig->Trigger_u8_Pin, DIO_u8_LOW);
+void ULTRASONIC_voidInit(const ULTRASONIC_Config_t *Copy_pstrConfig)
+{
+    DIO_voidSetPinDirection(Copy_pstrConfig->TrigPort, Copy_pstrConfig->TrigPin, DIO_u8_OUTPUT);
+    DIO_voidSetPinDirection(Copy_pstrConfig->EchoPort, Copy_pstrConfig->EchoPin, DIO_u8_INPUT);
+    DIO_voidSetPinValue(Copy_pstrConfig->TrigPort, Copy_pstrConfig->TrigPin, DIO_u8_LOW);
 }
 
-void ULTRASONIC_voidTrigger(const ULTRASONIC_Config_t *Copy_pstrConfig) {
-    /* TODO: 
-       1. Set Trigger pin HIGH.
-       2. Delay for ~10 microseconds.
-       3. Set Trigger pin LOW.
-    */
-	if (Copy_pstrConfig == NULL) return;
-
-	DIO_voidSetPinValue(Copy_pstrConfig->Trigger_u8_Port, Copy_pstrConfig->Trigger_u8_Pin, DIO_u8_HIGH);
-	_delay_us(10);
-	DIO_voidSetPinValue(Copy_pstrConfig->Trigger_u8_Port, Copy_pstrConfig->Trigger_u8_Pin, DIO_u8_LOW);
+void ULTRASONIC_voidTrigger(const ULTRASONIC_Config_t *Copy_pstrConfig)
+{
+    DIO_voidSetPinValue(Copy_pstrConfig->TrigPort, Copy_pstrConfig->TrigPin, DIO_u8_HIGH);
+    _delay_us(10);
+    DIO_voidSetPinValue(Copy_pstrConfig->TrigPort, Copy_pstrConfig->TrigPin, DIO_u8_LOW);
 }
 
-u16 ULTRASONIC_u16GetDistance(const ULTRASONIC_Config_t *Copy_pstrConfig) {
-    /* TODO: 
-       1. Call ULTRASONIC_voidTrigger().
-       2. Measure the Echo pulse width duration (using Timer/ICU or delay loop).
-       3. Calculate distance: Distance (cm) = (Duration * 0.0343) / 2.
-       4. Return the calculated distance in cm.
-    */
-	if (Copy_pstrConfig == NULL) return 0;
+u16 ULTRASONIC_u16GetDistance(const ULTRASONIC_Config_t *Copy_pstrConfig)
+{
+    u16 Local_u16EchoTime = 0;
+    u32 Local_u32Timeout = 0;
 
-    u32 Local_u32Duration = 0;
-
-    //1. Send trigger pulse
     ULTRASONIC_voidTrigger(Copy_pstrConfig);
 
-    //2. Wait for ECHO pin to go HIGH (with timeout)
-	while (DIO_voidGetPinValue(Copy_pstrConfig->Echo_u8_Port, Copy_pstrConfig->Echo_u8_Pin) == DIO_u8_LOW)
-	{
-		_delay_us(1);
-		if (Local_u32Duration > ULTRASONIC_u32_TIMEOUT_US) return 0; //nothing in range
-	}
+    /* 1. Timer initialization, edge select (rising edge), and flag clearing */
+    TIMER1_voidInit();
+    TIMER1_voidSetICUEdgeTrigger(TIMER1_ICU_RISING_EDGE);
+    TIMER1_voidClearICUFlag();
 
-	//3. Measure duration while ECHO pin stays HIGH
-	Local_u32Duration = 0;
-	while (DIO_voidGetPinValue(Copy_pstrConfig->Echo_u8_Port, Copy_pstrConfig->Echo_u8_Pin) == DIO_u8_HIGH)
-	{
-		_delay_us(1);
-		Local_u32Duration++;
-		if (Local_u32Duration > ULTRASONIC_u32_TIMEOUT_US) break;
-	}
+    /* 2. Wait for rising edge */
+    while (TIMER1_u8GetICUFlag() == 0)
+    {
+        Local_u32Timeout++;
+        if (Local_u32Timeout > 100000UL) { TIMER1_voidStop(); return 999; }
+    }
 
-    //Local_u32Duration now holds the pulse duration in microseconds
+    /* 3. Reset the counter, change capture to falling edge, and clear the flag */
+    TIMER1_voidSetTimerValue(0);
+    TIMER1_voidSetICUEdgeTrigger(TIMER1_ICU_FALLING_EDGE);
+    TIMER1_voidClearICUFlag();
 
-    return (u16)((Local_u32Duration * 343UL) / 20000UL);
+    /* 4. Wait for falling edge */
+    Local_u32Timeout = 0;
+    while (TIMER1_u8GetICUFlag() == 0)
+    {
+        Local_u32Timeout++;
+        if (Local_u32Timeout > 100000UL) { TIMER1_voidStop(); return 999; }
+    }
+
+    /* 5. Read time and stop timer */
+    Local_u16EchoTime = TIMER1_u16GetICUValue();
+    TIMER1_voidStop();
+
+    return (Local_u16EchoTime / 58);
+}
+
+
+u16 ULTRASONIC_u16GetFilteredDistance(const ULTRASONIC_Config_t *Copy_pstrConfig)
+{
+    u16 Local_u16Readings[5];
+    u16 Local_u16Sum = 0;
+    u16 Local_u16Max = 0;
+    u16 Local_u16Min = 0xFFFF; /* A very large number so that the first reading is the smallest */
+    u8 i;
+
+    /* 1. Take 5 consecutive readings */
+    for (i = 0; i < 5; i++)
+    {
+        Local_u16Readings[i] = ULTRASONIC_u16GetDistance(Copy_pstrConfig);
+        Local_u16Sum += Local_u16Readings[i];
+
+        /* 2. Find the maximum value */
+        if (Local_u16Readings[i] > Local_u16Max)
+        {
+            Local_u16Max = Local_u16Readings[i];
+        }
+
+        /* 3. Find the minimum value */
+        if (Local_u16Readings[i] < Local_u16Min)
+        {
+            Local_u16Min = Local_u16Readings[i];
+        }
+
+        /* Very short delay between readings to give the sensor time to send the wave */
+        _delay_ms(5);
+    }
+
+    /* 4. Subtract the maximum and minimum values from the sum, and divide the remainder by 3 */
+    Local_u16Sum = Local_u16Sum - Local_u16Max - Local_u16Min;
+
+    return (Local_u16Sum / 3);
 }
