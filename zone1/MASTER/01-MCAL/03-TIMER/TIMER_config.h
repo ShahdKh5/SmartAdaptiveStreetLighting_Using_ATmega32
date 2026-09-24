@@ -1,11 +1,9 @@
 #ifndef TIMER_CONFIG_H
 #define TIMER_CONFIG_H
 
-#define 	  WAVEFORM_GEN_MODE          FAST_PWM_MODE
-#define 	  OC0_ACTION                 FAST_PWM_CLEAR_OC0_ON_COMPARE_MATCH__SET_OC0_ON_TOP
+#define TIMER0_MODE       TIMER0_PHASE_CORRECT
+#define TIMER0_OC0_MODE   TIMER0_NON_INVERTING
+#define TIMER0_PRESCALER  TIMER0_DIV_8
 
-/*  CLK_DIV_BY_8 for standard Timer operation, or external clock source for counters */
-#define 	 PRESCALER_TYPE     CLK_DIV_BY_8
-#define 	 PRESCALER_MASK     0b11111000
 
-#endif
+#endif /* MASTER_01_MCAL_03_TIMER_TIMER_CONFIG_H_ */
